@@ -3,9 +3,29 @@
 angular.module('boltApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('main', {
+      .state('dashboard', {
         url: '/',
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
-      });
+        templateUrl: '',
+        controller: ''
+      })
+      .state('group-creation', {
+        url: '/create/group',
+        templateUrl: '',
+        controller: ''
+      })
+      .state('group-view', {
+        url: '/groups/:groupId',
+        templateUrl: '',
+        controller: ''
+      })
+      .state('event-creation', {
+        url: '/groups/:groupId/create/event',
+        templateUrl: '',
+        controller: ''
+      })
+      .state('event-view', {
+        url: 'groups/:groupId/events/:eventId',
+        templateUrl: '',
+        controller: ''
+      })
   });
