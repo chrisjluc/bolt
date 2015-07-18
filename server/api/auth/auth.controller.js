@@ -18,4 +18,6 @@ function authenticateUser(req, res, next) {
 
 function getPayPalUser(req, res) {
 
+
+    res.status(200).send('all good');
 }

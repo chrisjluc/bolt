@@ -30,7 +30,7 @@ angular.module('boltApp', [
                 controller: 'AuthCtrl as Auth'
             })
             .state('bolt.redirect', {
-                utl: 'redirect?code',
+                url: 'redirect?code',
                 templateUrl: 'app/auth/redirect.html',
                 controller: 'RedirectCtrl as Redirect'
             })
