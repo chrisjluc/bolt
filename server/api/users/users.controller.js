@@ -15,7 +15,6 @@ function createUser(req, res, next) {
     var firstName = req.body.first_name;
     var lastName = req.body.last_name;
 
-    console.log(req.body);
     async.waterfall([
         validateUserInfo,
         createNewUser
