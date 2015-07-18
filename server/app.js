@@ -15,13 +15,13 @@ var paypal = require('paypal-rest-sdk');
 // Set up paypal
 paypal.configure({
     'mode': 'sandbox',
-    'client_id': 'AUXGapTnFrkF7NSH6-sopE_DXA7ktDd3sgRUmHR9IWxoCRajy7fLzCPqAKeGA1wdAWa0LuXEQadEj1Eq',
-    'client_secret': 'EGLv26LPeyvJRYTru4Qm8EuxPB6qK3XrzZ3fbvNa85EqTStQ6GlZIwMlQYYP60utcOoNOgnDKCYGlO4F',
+    'client_id': 'ATIuH1VHksIaDFFpOfapLzPacHf9c7wDuT0wZzrngbzIbq593DEebUgidJ9BLv6Lma3VWRkEbWqY9lzZ',
+    'client_secret': 'EFuhilq5zlCQkaoceLMOL77lcwb_pq--z-CgToYSTG5tPibqBbLSVd-CZeHtxJycehPyvYMTwk0UdhKp',
     'openid_redirect_uri': 'http://localhost:9000/redirect'
 });
 
 var loginUrl = paypal.openIdConnect.authorizeUrl(
-        {'scope': 'openid'}
+        {'scope': 'openid profile'}
 );
 
 // Connect to database

@@ -10,7 +10,7 @@ module.exports = authController;
 
 function authenticateUser(req, res, next) {
     var loginUrl = paypal.openIdConnect.authorizeUrl(
-        {'scope': 'openid'}
+        {'scope': 'openid profile'}
     );
 
     res.status(200).send(loginUrl);
