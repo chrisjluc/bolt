@@ -9,7 +9,14 @@ var userSchema = mongoose.Schema({
     friends: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    created_date: {
+      type: Date,
+      default: Date.now()
+    },
+    updated_date: {
+      type: Date,
+    }
 });
 
 var User = mongoose.model('User', userSchema);

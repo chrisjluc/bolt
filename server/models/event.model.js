@@ -1,9 +1,18 @@
 var mongoose = require('mongoose');
 
 var eventSchema = {
-    users: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User'
+    users:  [{
+        account: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        role: {
+            type: String,
+            enum: [
+              'host',
+              'participant'
+            ]
+        }
     }],
     start_date: Date,
     location: String,
@@ -17,7 +26,14 @@ var eventSchema = {
             'cancelled'
         ]
     },
-    late_users: [Schema.Types.ObjectId]
+    late_users: [Schema.Types.ObjectId],
+    created_date: {
+        type: Date,
+        default: Date.now()
+    },
+    updated_date: {
+        type: Date
+    }
 };
 
 var Event = mongoose.model('Event', eventSchema);
