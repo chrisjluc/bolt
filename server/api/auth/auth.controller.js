@@ -2,7 +2,8 @@ var _ = require('lodash');
 var paypal = require('paypal-rest-sdk');
 
 var authController = {
-    authenticateUser: authenticateUser
+    authenticateUser: authenticateUser,
+    getPayPalUser: getPayPalUser
 };
 
 module.exports = authController;
@@ -13,4 +14,8 @@ function authenticateUser(req, res, next) {
     );
 
     res.status(200).send(loginUrl);
+}
+
+function getPayPalUser(req, res) {
+
 }

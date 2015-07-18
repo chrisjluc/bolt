@@ -19,6 +19,21 @@ angular.module('boltApp', [
                 templateUrl: 'app/main/main.html',
                 controller: 'MainCtrl as Main'
             })
+            .state('bolt.login', {
+                url: 'login',
+                templateUrl: 'app/auth/login.html',
+                controller: 'LoginCtrl as Login'
+            })
+            .state('bolt.auth', {
+                url: 'auth?code',
+                templateUrl: 'app/auth/auth.html',
+                controller: 'AuthCtrl as Auth'
+            })
+            .state('bolt.redirect', {
+                utl: 'redirect?code',
+                templateUrl: 'app/auth/redirect.html',
+                controller: 'RedirectCtrl as Redirect'
+            })
             .state('bolt.createGroup', {
                 url: 'create/group',
                 templateUrl: 'app/group/create.group.html',

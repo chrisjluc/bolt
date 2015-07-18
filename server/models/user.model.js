@@ -5,18 +5,23 @@ var userSchema = mongoose.Schema({
     last_name: String,
     email: String,
     password: String,
-    paypal_account: String,
+    is_authenticated_paypal: {
+        type: boolean,
+        default: false
+    },
     friends: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
     created_date: {
-      type: Date,
-      default: Date.now()
+        type: Date,
+        default: Date.now()
     },
     updated_date: {
-      type: Date,
+        type: Date,
     }
+    access_token: String,
+    refresh_token: String
 });
 
 var User = mongoose.model('User', userSchema);
