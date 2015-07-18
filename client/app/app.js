@@ -14,29 +14,27 @@ angular.module('boltApp', [
         $locationProvider.html5Mode(true);
 
         $stateProvider
-            .state('dashboard', {
+            .state('bolt', {
                 url: '/',
                 templateUrl: 'app/main/main.html',
-                controller: 'MainCtrl'
+                controller: 'MainCtrl as Main'
             })
-            .state('group-creation', {
-                url: '/create/group',
-                templateUrl: '',
-                controller: ''
+            .state('bolt.createGroup', {
+                url: 'create/group',
+                templateUrl: 'app/group/create.group.html',
+                controller: 'CreateGroupCtrl as CreateGroup'
             })
-            .state('group-view', {
-                url: '/groups/:groupId',
-                templateUrl: '',
-                controller: ''
+            .state('bolt.groupView', {
+                url: 'group/:groupId',
+                templateUrl: 'app/group/view.group.html',
+                controller: 'GroupCtrl as Group'
             })
-            .state('event-creation', {
-                url: '/groups/:groupId/create/event',
-                templateUrl: '',
-                controller: ''
+            .state('bolt.createEvent', {
+                url: 'create/event',
+                templateUrl: 'app/event/create.event.html'
             })
-            .state('event-view', {
-                url: 'groups/:groupId/events/:eventId',
-                templateUrl: '',
-                controller: ''
+            .state('bolt.eventView', {
+                url: 'event/:eventId',
+                templateUrl: 'app/event/view.event.html'
             })
     });
