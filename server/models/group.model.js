@@ -4,7 +4,7 @@ var groupSchema = {
     name: String,
     users:  [{
         account: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
         role: {
