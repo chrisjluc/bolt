@@ -81,12 +81,11 @@ function getPayPalUser(req, res) {
 }
 
 function ensureAuthenticated(req, res, next) {
-    var token = req.headers.authorization;
-
-    if (!token) {
+    if (!req.headers.authorization) {
         return res.status(401).send({message: 'Please make sure your request has an Authorization header'});
     }
 
+    var token = req.headers.authorization.split(' ')[1];
     var payload = jwt.decode(token, config.TOKEN_SECRET);
 
     if (payload.exp <= moment().unix()) {

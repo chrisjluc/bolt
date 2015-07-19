@@ -9,7 +9,11 @@
             vm.creatingGroup = creatingGroup;
 
             function creatingGroup(name) {
-              console.log(name);
+                $http.post('/api/groups', {
+                    groupName: name
+                }).success(function(response) {
+                    console.log(response);
+                });
             }
         });
 })();

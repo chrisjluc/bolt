@@ -11,10 +11,9 @@ module.exports = function(app) {
 
     // Insert routes below
     app.use('/api/auth', require('./api/auth/auth.router.js'));
-    app.use(AuthCtrl.ensureAuthenticated);
     app.use('/api/users', require('./api/users/users.router.js'));
-    app.use('/api/groups', require('./api/groups/groups.router.js'));
-    app.use('/api/events', require('./api/events/events.router.js'));
+    app.use('/api/groups',  AuthCtrl.ensureAuthenticated, require('./api/groups/groups.router.js'));
+    app.use('/api/events', AuthCtrl.ensureAuthenticated, require('./api/events/events.router.js'));
 
     // All undefined asset or api routes should return a 404
     app.route('/:url(api|auth|components|app|bower_components|assets)/*')
