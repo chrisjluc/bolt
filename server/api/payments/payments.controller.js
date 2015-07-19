@@ -54,3 +54,10 @@ function getPayments(req, res, next) {
             return res.status(200).send(payments);
         })
 }
+
+function paidPayments(payments){
+  _.forEach(payments,function(payment){
+    payment.status = "paid";
+    payment.save();
+  });
+}
