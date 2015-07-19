@@ -4,7 +4,8 @@ var User = require('../../models/user.model');
 
 var authController = {
     authenticateUser: authenticateUser,
-    getPayPalUser: getPayPalUser
+    getPayPalUser: getPayPalUser,
+    ensureAuthenticated: ensureAuthenticated
 };
 
 module.exports = authController;
@@ -68,4 +69,36 @@ function getPayPalUser(req, res) {
             });
         });
     });
+}
+
+function ensureAuthenticated(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).send({message: 'Please make sure your request has an Authorization header'});
+    }
+
+    var token = req.headers.authorization.split(' ')[1];
+    var payload = jwt.decode(token, config.TOKEN_SECRET);
+
+    if (payload.exp <= moment().unix()) {
+        return res.status(401).send({message: 'Token has expired'});
+    }
+
+    req.headers.userId = payload.sub;
+    User.findById(req.headers.userId, function (err, user) {
+        if(err) {
+            res.status(500).send({message: err});
+            return;
+        }
+        req.headers.user = user;
+        next();
+    });
+}
+
+function createToken(user) {
+    var payload = {
+        sub: user._id,
+        iat: moment().unix(),
+        exp: moment().add(14, 'days').unix()
+    };
+    return jwt.encode(payload, config.TOKEN_SECRET);
 }
