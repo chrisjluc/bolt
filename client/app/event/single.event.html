@@ -1,22 +1,23 @@
-<div>
+<div class="col-md-7">
     <h1 ng-bind="SingleEvent.event.name"></h1>
-    <tags-input ng-model="SingleEvent.tags" placeholder="Enter Email">
-        <auto-complete source="SingleEvent.userEmails"></auto-complete>
-    </tags-input>
-    <button ng-click="SingleEvent.inviteUsers()">Add Users</button>
     <button ng-if="!SingleEvent.userIsHost()"
             ng-click="SingleEvent.leaveEvent()">Leave Event</button>
     <img ng-src="{{ SingleEvent.getGoogleStaticMapsUrl() }}">
     <h2 ng-bind="SingleEvent.event.location.address"></h2>
-    <span>Join link:</span><h6 ng-bind="SingleEvent.longLink"></h6>
+    <h3 ng-bind="SingleEvent.getFormattedDate()"></h3>
     <h3 ng-bind="'Total Owing: $' + SingleEvent.totalOwing"></h3>
-
+</div>
+<div class="col-md-5">
     <h2>Attendees</h2>
-    <div ng-repeat="user in SingleEvent.event.users">
-        {{user.account.first_name}} {{user.account.last_name}}<br>
-        {{user.role}}<br>
+    <div ng-repeat="user in SingleEvent.event.users"
+         class="attendee">
+        {{user.account.first_name}} {{user.account.last_name}} <span ng-if="user.role === 'host'">- {{user.role}}</span><br>
         <button ng-if="SingleEvent.userIsHost() && SingleEvent.notSelf(user)"
-                                  ng-click="SingleEvent.removeUser(user)">Remove</button>
-        -----------------------------------------------------------
+                ng-click="SingleEvent.removeUser(user)">Remove</button>
     </div>
+    <tags-input ng-model="SingleEvent.tags" placeholder="Enter Email">
+        <auto-complete source="SingleEvent.userEmails"></auto-complete>
+        <button class="add-button"
+                ng-click="SingleEvent.inviteUsers()">Add Users</button>
+    </tags-input>
 </div>

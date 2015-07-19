@@ -3,7 +3,7 @@
 
     angular
         .module('boltApp')
-        .controller('CreateEventCtrl', function ($scope, $http) {
+        .controller('CreateEventCtrl', function ($scope, $http, $state) {
             var vm = this;
 
             vm.creatingEvent = creatingEvent;
@@ -28,12 +28,12 @@
                 $http
                     .post('/api/events', vm.event)
                     .success(function (response) {
-                        vm.event = vm.defaultEvent;
-                        vm.done = true;
-                        vm.newEventId = response.event._id;
+                        alert('Event created successfully!');
+                        $state.go('bolt.eventsView');
                     })
                     .error(function (error) {
-
+                        alert('Could not create event.');
+                        $state.go('bolt.eventsView');
                     })
             }
 
@@ -60,8 +60,8 @@
                 var place = autocomplete.getPlace();
 
                 vm.event.location.address = place.formatted_address;
-                vm.event.location.longitude = place.geometry.location.A;
-                vm.event.location.latitude = place.geometry.location.F;
+                vm.event.location.longitude = place.geometry.location.F;
+                vm.event.location.latitude = place.geometry.location.A;
 
                 setMapsUrl();
             }

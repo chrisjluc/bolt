@@ -296,7 +296,7 @@ function checkIn(req, res) {
 			return res.status(400).send('User does not exist in the event');
 		}
 
-		var eventCoord = event.location.coordinates;
+		var eventCoord = event.location;
 
 		if (isCoordinateWithinThreshold(userCoord, eventCoord)) {
 			var query = {
@@ -325,8 +325,8 @@ var degreeToMetre = 111120;
 var thresholdMetres = 100;
 
 function isCoordinateWithinThreshold(userCoord, eventCoord) {
-	return ((userCoord.longitude - eventCoord.longitude) ^ 2 +
-		(userCoord.latitude - eventCoord.latitude) ^ 2) ^ 0.5 * degreeToMetre < thresholdMetres;
+	return Math.sqrt((Math.pow((userCoord.longitude - eventCoord.longitude), 2) +
+		Math.pow((userCoord.latitude - eventCoord.latitude), 2))) * degreeToMetre < thresholdMetres;
 }
 
 function getShortLink(req, res, next) {

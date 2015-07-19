@@ -14,8 +14,10 @@
     <div ng-bind="::'Late Fee: $' + event.late_fee"></div>
     <div ng-bind="::event.status"></div>
     <div ng-bind="::event.users.length + ' members'"></div>
-    <button ng-if="::event.allowCheckIn" type="button" class="c-eventCard-checkIn btn btn-grey"
-            ng-click= "Event.checkIn(event._id)">
-        Check In
+    <button ng-if="::event.allowCheckIn"
+            ng-disabled="Event.isButtonLoading(event._id)"
+            type="button" class="c-eventCard-checkIn btn btn-grey"
+            ng-click="Event.checkIn(event._id)"
+            ng-bind="Event.isButtonLoading(event._id) ? 'Checking in...' : 'Check in'">
     </button>
 </div>

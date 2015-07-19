@@ -13,6 +13,7 @@
             vm.userEmails = _.map(vm.users, function (user) {
                 return user.email;
             });
+			filterEmails();
             vm.tags = [];
             vm.totalOwing = getTotalOwing();
 
@@ -25,6 +26,16 @@
 			vm.notSelf = notSelf;
 			vm.getShortLink = getShortLink;
 			vm.getGoogleStaticMapsUrl = getGoogleStaticMapsUrl;
+			vm.getFormattedDate = getFormattedDate;
+
+			function filterEmails() {
+				var emailsInEvent = _.map(vm.event.users, function(user) {
+					return user.account.email;
+				});
+				vm.userEmails = _.filter(vm.userEmails, function(email) {
+					return !_.contains(emailsInEvent, email);
+				})
+			}
 
 			var selfInEvent = findSelf();
 			if (!selfInEvent) {
@@ -47,6 +58,12 @@
                 });
 
 				var request = {
+					fromEmail: selfInEvent.account.email,
+		            subject: 'Invitation: Join a Bolt!',
+		            text: 'Hey, come join me in my initiative to be more proactive and efficient by using Bolt! ' +
+	                      'Once you join, you are committing to be on time to the event you have been invited to. ' +
+	                      "Here's the catch: If you don't make it on time, you have to donate " + vm.event.late_fee +
+	                      " dollars to a charity of your choice! Here is the link to join the event: ",
 					link: link
 				};
 
@@ -55,7 +72,9 @@
 					$http
 						.post('/api/sendgrid/send-email', request)
 						.success(function (response) {
-
+							alert('Invites sent!');
+							vm.tags = [];
+							filterEmails();
 						})
 						.error(function (error) {
 
@@ -122,7 +141,11 @@
 			function getGoogleStaticMapsUrl(){
 				var longitude = vm.event.location.longitude;
 				var latitude = vm.event.location.latitude;
-				return 'https://maps.googleapis.com/maps/api/staticmap?center=' + longitude + ',' + latitude + '&zooom=12&size=400x400&maptype=roadmap&markers=color:red%7Clabel:A%7C' + longitude + ',' + latitude;
+				return 'https://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zooom=10&size=400x300&maptype=roadmap&markers=color:red%7Clabel:A%7C' + latitude + ',' + longitude;
+			}
+
+			function getFormattedDate() {
+				return moment(vm.event.start_date).format('MMMM DD, YYYY @ hh:mmA');
 			}
 		})
 })();
