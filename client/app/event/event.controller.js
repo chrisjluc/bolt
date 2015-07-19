@@ -44,6 +44,7 @@
 							modifiedEvent.checked = true;
 							modifiedEvent.allowCheckIn = false;
 							modifiedEvent.validCheckIn = true;
+							modifiedEvent.distance = Math.round(response.distance/1000) + 'km';
 						})
 						.error(function (error) {
 							vm.buttonIdLoading = '';
@@ -56,6 +57,7 @@
 							modifiedEvent.checked = true;
 							modifiedEvent.allowCheckIn = false;
 							modifiedEvent.validCheckIn = false;
+							modifiedEvent.distance = Math.round(error.distance/1000) + 'km';
 						});
 				}
 			}

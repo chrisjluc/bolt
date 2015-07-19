@@ -21,6 +21,7 @@
             ng-bind="Event.isButtonLoading(event._id) ? 'Checking in...' : 'Check in'">
     </button>
     <div ng-if="event.checked" class="c-eventCard-checkIn c-eventCard-bolt">
+        <span ng-bind="event.distance"></span>
         <i class="fa fa-bolt" ng-class="{ 'success' : event.validCheckIn, 'fail': !event.validCheckIn }"></i>
     </div>
 </div>
