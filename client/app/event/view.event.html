@@ -4,13 +4,18 @@
 <div ng-if="!Event.events.length">
     You are not part of any event.
 </div>
-<div ng-repeat="event in Event.events">
+<div ng-repeat="event in ::Event.events" class="c-eventCard">
     <div>
-        <a ui-sref="bolt.eventView({ eventId: event._id })" ng-bind="event.name"></a>
+        <h4><a ui-sref="bolt.eventView({ eventId: event._id })" ng-bind="::event.name"></a></h4>
     </div>
-    <div ng-bind="event.late_fee"></div>
-    <div ng-bind="event.location.address"></div>
-    <div ng-bind="event.status"></div>
-    <div ng-bind="event.users.length + ' users'"></div>
-    <button type="button" ng-show="event.allowCheckIn" ng-click= "Event.checkIn(event._id)">Check In</button>
+    <div ng-bind="::event.location.address"></div>
+    <div ng-bind="::event.start_date | date: 'MMM dd, yyyy h:mma'"></div>
+
+    <div ng-bind="::'Late Fee: $' + event.late_fee"></div>
+    <div ng-bind="::event.status"></div>
+    <div ng-bind="::event.users.length + ' members'"></div>
+    <button ng-if="::event.allowCheckIn" type="button" class="c-eventCard-checkIn btn btn-grey"
+            ng-click= "Event.checkIn(event._id)">
+        Check In
+    </button>
 </div>
