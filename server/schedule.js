@@ -34,9 +34,9 @@ function scheduleEvent(event) {
 			_.forEach(event.users, function (user) {
 				if (!user.on_time) {
 					var newPayment = new Payment({
-						users: user._id,
+						user: user.account,
 						event: event._id,
-						amount: event.lateFee
+						amount: event.late_fee
 					});
 					newPayment.save();
 				}
@@ -63,8 +63,8 @@ function scheduleEvent(event) {
 				event.start_date.setSeconds(event.start_date.getSeconds() + recurringSeconds[event.recurring]);
 
 				var update = {
-					start_date: event.start_date + recurringSeconds[event.recurring],
-					users: _.map(event.users, function(user){
+					start_date: event.start_date,
+					users: _.map(event.users, function (user) {
 						user.on_time = false;
 						return user;
 					})
