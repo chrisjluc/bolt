@@ -1,11 +1,11 @@
 (function () {
-    'use strict';
+	'use strict';
 
-    angular
-        .module('boltApp')
-        .controller('SingleEventCtrl', function (eventData, userData, usersData, $http, $state, paymentsData) {
-            var vm = this;
-            var link = 'http://localhost:9000/join/event/' + eventData.joinToken;
+	angular
+		.module('boltApp')
+		.controller('SingleEventCtrl', function (eventData, userData, usersData, $http, $state, paymentsData) {
+			var vm = this;
+			var link = 'http://localhost:9000/join/event/' + eventData.joinToken;
 
             vm.event = eventData;
             vm.users = usersData.users;
@@ -16,18 +16,19 @@
             vm.tags = [];
             vm.totalOwing = getTotalOwing();
 
-            console.log(vm.payments);
+			vm.longLink = 'http://127.0.0.1:9000/join/event/' + vm.event.joinToken;
 
-            vm.inviteUsers = inviteUsers;
-            vm.leaveEvent = leaveEvent;
-            vm.removeUser = removeUser;
-            vm.userIsHost = userIsHost;
-            vm.notSelf = notSelf;
+			vm.inviteUsers = inviteUsers;
+			vm.leaveEvent = leaveEvent;
+			vm.removeUser = removeUser;
+			vm.userIsHost = userIsHost;
+			vm.notSelf = notSelf;
+			vm.getShortLink = getShortLink;
 
-            var selfInEvent = findSelf();
-            if (!selfInEvent) {
-                $state.go('bolt');
-            }
+			var selfInEvent = findSelf();
+			if (!selfInEvent) {
+				$state.go('bolt');
+			}
 
             function getTotalOwing() {
                 var owingBalance = 0;
@@ -44,22 +45,22 @@
                     return tag.text;
                 });
 
-                var request = {
-                    link: link
-                };
+				var request = {
+					link: link
+				};
 
-                _.forEach(emails, function (email) {
-                    request.email = email;
-                    $http
-                        .post('/api/sendgrid/send-email', request)
-                        .success(function (response) {
+				_.forEach(emails, function (email) {
+					request.email = email;
+					$http
+						.post('/api/sendgrid/send-email', request)
+						.success(function (response) {
 
-                        })
-                        .error(function (error) {
+						})
+						.error(function (error) {
 
-                        });
-                })
-            }
+						});
+				})
+			}
 
             function leaveEvent() {
                 var userId = userData._id;
@@ -73,8 +74,8 @@
                     })
                     .error(function (error) {
 
-                    });
-            }
+					});
+			}
 
             function removeUser(user) {
                 var userToRemove = user.account._id;
@@ -87,14 +88,14 @@
                     })
                     .error(function (error) {
 
-                    });
-            }
+					});
+			}
 
-            function userIsHost() {
-                var self = findSelf();
+			function userIsHost() {
+				var self = findSelf();
 
-                return self && self.role === 'host';
-            }
+				return self && self.role === 'host';
+			}
 
             function findSelf() {
                 return _.find(vm.event.users, function (user) {
@@ -102,9 +103,20 @@
                 });
             }
 
-            function notSelf(user) {
-                return user.account._id !== userData._id;
-            }
-        })
+			function notSelf(user) {
+				return user.account._id !== userData._id;
+			}
+
+			function getShortLink() {
+				var request = {
+					link: vm.longLink
+				};
+				$http
+					.post('/api/events/get-short-link', request)
+					.success(function (response) {
+						return response.data.url;
+					});
+			}
+		})
 })();
 

@@ -4,6 +4,7 @@ var EventsCtrl = require('./events.controller.js');
 var router = express.Router();
 
 router.get('/', EventsCtrl.getEvents);
+router.post('/get-short-link', EventsCtrl.getShortLink);
 router.post('/', EventsCtrl.createEvent);
 router.get('/:eventId', EventsCtrl.getEvent);
 router.patch('/:eventId', EventsCtrl.modifyEvent);

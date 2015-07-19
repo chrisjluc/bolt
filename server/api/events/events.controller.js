@@ -5,6 +5,12 @@ var schedule = require('../../schedule');
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var config = require('../../config/environment');
+var BitlyAPI = require("node-bitlyapi");
+var Bitly = new BitlyAPI({
+	client_id: "c734a652d9a92ac156d27db52d199fcec5b93731",
+	client_secret: "0b3156f7208c3ae8cfb11e77877fe2ebcf5e31ad"
+});
+Bitly.setAccessToken("e833c4f3bcac47b177de922a05117e4d7e392328");
 
 var eventsController = {
 	getEvents: getEvents,
@@ -14,7 +20,8 @@ var eventsController = {
 	addUserToEvent: addUserToEvent,
 	removeUserFromEvent: removeUserFromEvent,
 	modifyUserInEvent: modifyUserInEvent,
-	checkIn: checkIn
+	checkIn: checkIn,
+	getShortLink: getShortLink
 };
 
 module.exports = eventsController;
@@ -316,4 +323,16 @@ var thresholdMetres = 100;
 function isCoordinateWithinThreshold(userCoord, eventCoord) {
 	return ((userCoord.longitude - eventCoord.longitude) ^ 2 +
 		(userCoord.latitude - eventCoord.latitude) ^ 2) ^ 0.5 * degreeToMetre < thresholdMetres;
+}
+
+function getShortLink(req, res, next) {
+	var link = req.body.link;
+	Bitly.shorten({longUrl: link}, function (err, results) {
+		if (err) {
+			return next(err);
+		}
+
+		return res.status(200).send(results)
+	});
+
 }
