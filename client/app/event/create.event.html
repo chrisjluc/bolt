@@ -3,6 +3,12 @@ Event Name: <label for="eventName"></label><input id="eventName" ng-model="Creat
 Event Date: <label for="eventDate"></label><input type="datetime-local" id="eventDate" ng-model="CreateEvent.event.start_date"> <br />
 Late Fee: <label for="lateFee"></label><input type="number" id="lateFee" ng-model="CreateEvent.event.lateFee"> <br />
 Location: <label for="location"></label><input id="location" ng-model="CreateEvent.event.location"> <br/>
+<iframe
+        width="450"
+        height="250"
+        frameborder="0" style="border:0"
+        src="https://www.google.com/maps/embed/v1/search?key=AIzaSyC2UIS7oCLUNrEVtHVgdWFv_a-MfDn2lr8&q=Vancouver">
+</iframe>
 Add Participants: <input type="text" id="participants" ng-model="CreateEvent.event.participants">
 
 <button type="button" ng-click= "CreateEvent.creatingEvent()">Create Event</button>

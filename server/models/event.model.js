@@ -21,7 +21,7 @@ var eventSchema = {
     }],
     start_date: Date,
     location: {
-        name: String,
+        address: String,
         coordinates: {
             longitude: Number,
             latitude: Number

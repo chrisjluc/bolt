@@ -5,10 +5,25 @@ var async = require('async');
 var User = require('./../../models/user.model.js');
 
 var usersController = {
+    getUsers: getUsers,
     createUser: createUser
 };
 
 module.exports = usersController;
+
+function getUsers(req, res, next) {
+    User
+        .find(function(error, users) {
+            if (error) {
+                error = new Error("Error when finding users.");
+                return next(error);
+            }
+
+            return res.status(200).send({
+                users: users
+            });
+        })
+}
 
 function createUser(req, res, next) {
     var userEmail = req.body.email;
