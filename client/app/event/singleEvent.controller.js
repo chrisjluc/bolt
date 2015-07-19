@@ -20,6 +20,11 @@
             vm.userIsHost = userIsHost;
             vm.notSelf = notSelf;
 
+            var selfInEvent = findSelf();
+            if (!selfInEvent) {
+                $state.go('bolt');
+            }
+
             function inviteUsers() {
                 var emails = _.map(vm.tags, function (tag) {
                     return tag.text;
@@ -50,6 +55,7 @@
                         _.remove(vm.event.users, function(user) {
                             return user.account._id === userId;
                         });
+                        $state.go('bolt');
                     })
                     .error(function(error){
 
@@ -71,11 +77,15 @@
             }
 
             function userIsHost() {
-                var self = _.find(vm.event.users, function(user) {
-                    return user.account._id === userData._id;
-                });
+                var self = findSelf();
 
                 return self && self.role === 'host';
+            }
+
+            function findSelf() {
+                return _.find(vm.event.users, function(user) {
+                    return user.account._id === userData._id;
+                });
             }
 
             function notSelf(user) {

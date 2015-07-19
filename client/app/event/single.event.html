@@ -6,7 +6,8 @@ Single
         <auto-complete source="SingleEvent.userEmails"></auto-complete>
     </tags-input>
     <button ng-click="SingleEvent.inviteUsers()">Add Users</button>
-    <button ng-click="SingleEvent.leaveEvent()">Leave Event</button>
+    <button ng-if="!SingleEvent.userIsHost()"
+            ng-click="SingleEvent.leaveEvent()">Leave Event</button>
     <h2 ng-bind="SingleEvent.event.location.address"></h2>
     <h6 ng-bind="SingleEvent.event.joinToken"></h6>
 
