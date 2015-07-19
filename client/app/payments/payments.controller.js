@@ -3,10 +3,10 @@
 
 	angular
 		.module('boltApp')
-		.controller('PaymentsCtrl', function ($scope, $http, payments) {
+		.controller('PaymentsCtrl', function ($scope, $http, paymentsData) {
 			var vm = this;
 
-			vm.payments = payments;
+			vm.payments = paymentsData;
 			vm.unpaidPayments = filterPayments('unpaid');
 			vm.paidPayments = filterPayments('paid');
 
