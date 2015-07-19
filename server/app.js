@@ -11,6 +11,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 var paypal = require('paypal-rest-sdk');
+var schedule = require('./schedule');
+
 
 // Set up paypal
 paypal.configure({
@@ -38,8 +40,10 @@ require('./routes')(app);
 
 // Start server
 server.listen(config.port, config.ip, function () {
-  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
 });
+
+schedule.init();
 
 // Expose app
 exports = module.exports = app;
