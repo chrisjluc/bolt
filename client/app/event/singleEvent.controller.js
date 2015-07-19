@@ -3,7 +3,7 @@
 
     angular
         .module('boltApp')
-        .controller('SingleEventCtrl', function (eventData, userData, usersData, $http) {
+        .controller('SingleEventCtrl', function (eventData, userData, usersData, $http, $state) {
             var vm = this;
             var link = 'http://localhost:9000/join/event/' + eventData.joinToken;
 
