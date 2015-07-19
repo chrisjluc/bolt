@@ -5,7 +5,7 @@ var Payment = require('./models/payment.model');
 
 module.exports = {
 	init: init,
-	scheduleEvent: scheduleEvent,
+	scheduleEvent: scheduleEvent
 };
 
 var recurringSeconds = {
@@ -26,40 +26,69 @@ function init() {
 }
 
 function scheduleEvent(event) {
-	console.log(event);
+	console.log(event.name + ' being scheduled');
 	schedule.scheduleJob(event._id, event.start_date, function () {
 		Event.findById(event._id, function (err, event) {
 			console.log(event._id + " " + event.name + " event is being triggered");
 
-			_.forEach(event.users, function(user){
-        if(!user.on_time){
-          var newPayment = new Payment({
-            users: user._id,
-            event: event._id,
-            amount: event.lateFee,
-            status: 'unpaid'
-          });
-          newPayment.save();
-        }
+			_.forEach(event.users, function (user) {
+				if (!user.on_time) {
+					var newPayment = new Payment({
+						users: user._id,
+						event: event._id,
+						amount: event.lateFee
+					});
+					newPayment.save();
+				}
 			});
 
-
-			// schedule recurring events again
-			scheduledJobs[event._id] = null;
 			var query = {
 				_id: event._id
 			};
-			var update = {
-				start_date: event.start_date + recurringSeconds[event.recurring]
-			};
-			var option = {
-				'new': true
-			};
-			event.findOneAndUpdate(query, update, option
-				, function(err, updatedEvent){
-				if (err) return console.error(err);
-				scheduleEvent(updatedEvent);
-			});
+
+			// schedule recurring events again
+			// or set as finished
+			if (event.recurring === 'None') {
+				var update = {
+					status: 'finished'
+				};
+				Event.findOneAndUpdate(query, update
+					, function (err) {
+						if (err) return console.error(err);
+					});
+
+			} else {
+				schedule.scheduledJobs[event._id] = null;
+
+				event.start_date.setSeconds(event.start_date.getSeconds() + recurringSeconds[event.recurring]);
+				_.forEach(event.users, function (user) {
+					if (!user.on_time) {
+						console.log(event.name + ' event, a user was charged $' + event.late_fee);
+						var newPayment = new Payment({
+							users: user._id,
+							event: event._id,
+							amount: event.late_fee
+						});
+						newPayment.save();
+					}
+				});
+
+				var update = {
+					start_date: event.start_date + recurringSeconds[event.recurring],
+					users: _.map(event.users, function(user){
+						user.on_time = false;
+						return user;
+					})
+				};
+				var option = {
+					'new': true
+				};
+				Event.findOneAndUpdate(query, update, option
+					, function (err, updatedEvent) {
+						if (err) return console.error(err);
+						scheduleEvent(updatedEvent);
+					});
+			}
 		});
 	});
 }

@@ -15,7 +15,8 @@ var paymentSchema = {
 		enum: [
 			'unpaid',
 			'paid'
-		]
+		],
+		default: 'unpaid'
 	},
 	created_date: {
 		type: Date,

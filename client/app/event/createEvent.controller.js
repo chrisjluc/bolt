@@ -17,7 +17,7 @@
                   latitude: 0
                 },
                 participants: [],
-                recurring: ''
+                recurring: 'None'
             };
 
             function creatingEvent() {

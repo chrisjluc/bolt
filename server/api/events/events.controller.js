@@ -32,8 +32,12 @@ function getEvents(req, res, next) {
 				return next(error);
 			}
 
-            _.forEach(events, function(err, event){
-                event.allowCheckIn = Date.now() < event.start_date && event.start_date >= Date.now() - 120 * 1000;
+			var now = new Date();
+			var twoMinAgo = new Date();
+			twoMinAgo.setSeconds(twoMinAgo.getSeconds() - 5 * 60);
+
+            _.forEach(events, function(event){
+                event._doc.allowCheckIn = now < event.start_date && event.start_date >= twoMinAgo;
             });
 
             return res.status(200).send(events);
@@ -297,6 +301,7 @@ function checkIn(req, res) {
 			});
 
 			Event.findOneAndUpdate(query, {users: users}, function () {
+				console.log('User has checkedin');
 				return res.status(200).send('User has checkedin');
 			})
 		} else {
