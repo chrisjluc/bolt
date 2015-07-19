@@ -268,6 +268,9 @@ function modifyUserInEvent(req, res, next) {
 		});
 }
 
+var degreeToMetre = 111120;
+var thresholdMetres = 250;
+
 function checkIn(req, res) {
 	var userId = req.headers.user._id;
 	var userCoord = req.body.coordinates;
@@ -290,7 +293,8 @@ function checkIn(req, res) {
 
 		var eventCoord = event.location;
 
-		if (isCoordinateWithinThreshold(userCoord, eventCoord)) {
+		var dist = squaredDistance(userCoord, eventCoord);
+		if (dist < thresholdMetres) {
 			var query = {
 				_id: event._id
 			};
@@ -305,20 +309,17 @@ function checkIn(req, res) {
 			}, function (err) {
 				if (err) return console.error(err);
 				console.log('User has checkedin');
-				return res.status(200).send('User has checkedin');
+				return res.status(200).send({distance: dist});
 			})
 		} else {
-			return res.status(400).send('User is not within threshold');
+			return res.status(400).send({distance: dist});
 		}
 	});
 }
 
-var degreeToMetre = 111120;
-var thresholdMetres = 250;
-
-function isCoordinateWithinThreshold(userCoord, eventCoord) {
+function squaredDistance(userCoord, eventCoord) {
 	return Math.sqrt((Math.pow((userCoord.longitude - eventCoord.longitude), 2) +
-		Math.pow((userCoord.latitude - eventCoord.latitude), 2))) * degreeToMetre < thresholdMetres;
+		Math.pow((userCoord.latitude - eventCoord.latitude), 2))) * degreeToMetre;
 }
 
 function getShortLink(req, res, next) {
