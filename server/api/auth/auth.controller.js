@@ -1,6 +1,9 @@
 var _ = require('lodash');
 var paypal = require('paypal-rest-sdk');
 var User = require('../../models/user.model');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var config = require('../../config/environment');
 
 var authController = {
     authenticateUser: authenticateUser,
@@ -45,7 +48,7 @@ function getPayPalUser(req, res) {
                     }, function(err){
                         if(err) return res.status(400).send(err);
                         console.log('Updated existing user');
-                        res.status(200).send('all good');
+                        sendUser(user);
                     });
 
                 } else {
@@ -62,13 +65,21 @@ function getPayPalUser(req, res) {
                     newUser.save(function(err, user){
                         if(err) return res.status(400).send(err);
                         console.log('Created new user');
-                        res.status(200).send('all good');
+                        sendUser(user);
                     });
 
                 }
             });
         });
     });
+
+    function sendUser(user) {
+        var userData = {
+            user: user,
+            token: createToken(user)
+        };
+        res.status(200).send(userData);
+    }
 }
 
 function ensureAuthenticated(req, res, next) {
