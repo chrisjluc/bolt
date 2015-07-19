@@ -5,20 +5,20 @@
         .module('boltApp')
         .service('dataResolver', dataResolver);
 
-    dataResolver.$inject = [
-        '$http',
-        '$q',
-        'user'
-    ];
-
     function dataResolver($http, $q) {
-        var deferredPromise = $q.defer();
+        var vm = this;
 
-        $http.get('')
-            .success(function (response) {
+        vm.resolve = resolve;
 
-            });
+        function resolve(url) {
+            var deferredPromise = $q.defer();
 
-        return deferredPromise.promise;
+            $http.get(url)
+                .success(function (response) {
+                    deferredPromise.resolve(response);
+                });
+
+            return deferredPromise.promise;
+        }
     }
 })();

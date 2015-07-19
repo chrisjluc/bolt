@@ -1,7 +1,5 @@
-View Group <br />
-Host: <label id="hostName" data-ng-model=""> host</label> <br />
-<li ng-repeat="Names of memebers"></li> <br />
-Group Created: <label id="dateCreated" data-ng-model=""> Group Created</label> <br />
-Latest Edit: <label id="lastUpdate" data-ng-model=""> Latest Edit</label> <br />
+Groups
 
-
+<div ng-repeat="group in Group.groups">
+    {{group.name}}
+</div>

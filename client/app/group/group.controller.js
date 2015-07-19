@@ -3,13 +3,13 @@
 
     angular
         .module('boltApp')
-        .controller('GroupCtrl', function ($scope, $http) {
-        var vm = this;
-        vm.nameValues = nameValues;
+        .controller('GroupCtrl', function ($scope, $http, groups) {
+            var vm = this;
 
-        function nameValues() {
-           document.getElementId("listNames").value = "";
-        }
-        });
+            vm.groups = groups;
+
+            //dataResolver.resolve('/api/groups');
+
+        })
 })();
 

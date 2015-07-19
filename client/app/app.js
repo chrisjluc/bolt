@@ -41,9 +41,14 @@ angular.module('boltApp', [
                 controller: 'CreateGroupCtrl as CreateGroup'
             })
             .state('bolt.groupView', {
-                url: 'group/:groupId',
+                url: 'group',
                 templateUrl: 'app/group/view.group.html',
-                controller: 'GroupCtrl as Group'
+                controller: 'GroupCtrl as Group',
+                resolve: {
+                    groups: ['dataResolver', function(dataResolver) {
+                        return dataResolver.resolve('/api/groups')
+                    }]
+                }
             })
             .state('bolt.createEvent', {
                 url: 'create/event',

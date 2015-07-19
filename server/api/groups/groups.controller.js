@@ -15,15 +15,13 @@ function getGroups(req, res, next) {
     };
 
     Group
-        .find(query, function(error, events) {
+        .find(query, function(error, groups) {
             if (error) {
                 error = new Error('Some error when finding groups.');
                 return next(error);
             }
 
-            return res.status(200).send({
-                events: events
-            });
+            return res.status(200).send(groups);
         });
 }
 
