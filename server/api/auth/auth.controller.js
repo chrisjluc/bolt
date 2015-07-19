@@ -43,7 +43,6 @@ function getPayPalUser(req, res) {
                     User.findByIdAndUpdate({_id: user._id}, {
                         access_token: tokenInfo.access_token,
                         refresh_token: tokenInfo.refresh_token,
-                        id_token: tokenInfo.id_token,
                         token_expiry_date: Date.now() + 1000 * tokenInfo.expires_in
                     }, function(err){
                         if(err) return res.status(400).send(err);
@@ -59,7 +58,6 @@ function getPayPalUser(req, res) {
                         user_id: userInfo.user_id,
                         access_token: tokenInfo.access_token,
                         refresh_token: tokenInfo.refresh_token,
-                        id_token: tokenInfo.id_token,
                         token_expiry_date: Date.now() + 1000 * tokenInfo.expires_in
                     });
                     newUser.save(function(err, user){

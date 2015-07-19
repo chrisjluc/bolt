@@ -20,8 +20,7 @@ var userSchema = mongoose.Schema({
         type: Date
     },
     access_token: String,
-    refresh_token: String,
-    id_token: String
+    refresh_token: String
 });
 
 var User = mongoose.model('User', userSchema);
