@@ -16,7 +16,7 @@
                 $http
                     .get('/api/auth/parse-token', params)
                     .success(function(eventId) {
-                        var url = '/api/events/' + eventId + '/users/' + userData.account;
+                        var url = '/api/events/' + eventId + '/users/' + userData._id;
                         $http.put(url).success(function(response) {
                             console.log(response);
                             vm.loading = false;

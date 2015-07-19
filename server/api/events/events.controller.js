@@ -199,7 +199,7 @@ function addUserToEvent(req, res, next) {
 			}
 
 			var userAlreadyExists = !_.every(event.users, function (user) {
-				return user.account !== userToAdd;
+				return user.account.toString() !== userToAdd;
 			});
 
 			if (userAlreadyExists) {
