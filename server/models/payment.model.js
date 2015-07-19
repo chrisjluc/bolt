@@ -1,21 +1,13 @@
 var mongoose = require('mongoose');
 
 var paymentSchema = {
-	userId: {
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	eventId: {
+	event: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Event'
-	},
-	eventName: String,
-	location: {
-		address: String,
-		coordinates: {
-			longitude: Number,
-			latitude: Number
-		}
 	},
 	amount: Number,
 	status: {
@@ -29,6 +21,7 @@ var paymentSchema = {
 		type: Date,
 		default: Date.now()
 	}
+
 };
 
 var Payment = mongoose.model('Payment', paymentSchema);
