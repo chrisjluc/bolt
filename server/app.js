@@ -20,10 +20,6 @@ paypal.configure({
     'openid_redirect_uri': 'http://localhost:9000/redirect'
 });
 
-var loginUrl = paypal.openIdConnect.authorizeUrl(
-        {'scope': 'openid profile'}
-);
-
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', function(err) {
