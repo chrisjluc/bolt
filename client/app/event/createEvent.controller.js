@@ -56,8 +56,8 @@
                 var place = autocomplete.getPlace();
 
                 vm.event.location.address = place.formatted_address;
-                vm.event.location.longitude = place.geometry.location.A;
-                vm.event.location.latitude = place.geometry.location.F;
+                vm.event.location.longitude = place.geometry.location.F;
+                vm.event.location.latitude = place.geometry.location.A;
             }
         });
 })();
