@@ -7,39 +7,35 @@
             var vm = this;
 
             vm.creatingEvent = creatingEvent;
-            vm.getGoogleStaticMapsUrl = getGoogleStaticMapsUrl;
-            vm.defaultEvent = {
+            vm.event = {
                 eventName: '',
                 startDate: '',
                 lateFee: 0,
                 location: {
                     address: '',
-                    longitude: 0,
-                    latitude: 0
+                    latitude: 43.653226,
+                    longitude: -79.38318429999998
                 },
                 participants: [],
                 recurring: 'None'
             };
-            vm.event = vm.defaultEvent;
 
-            vm.creatingEvent = creatingEvent;
+            initialize();
 
             function creatingEvent() {
+                var request = vm.event;
                 $http
-                    .post('/api/events', vm.event)
+                    .post('/api/events', request)
                     .success(function (response) {
-                        alert('Event created successfully!');
-                        $state.go('bolt.eventsView');
+                        $state.go('bolt.eventView', { eventId: response.event._id });
                     })
                     .error(function (error) {
-                        alert('Could not create event.');
-                        $state.go('bolt.eventsView');
+                        console.log(error);
                     })
             }
 
             // This example displays an address form, using the autocomplete feature
-// of the Google Places API to help users fill in the information.
-
+            // of the Google Places API to help users fill in the information.
             var autocomplete;
 
             function initialize() {
@@ -60,22 +56,9 @@
                 var place = autocomplete.getPlace();
 
                 vm.event.location.address = place.formatted_address;
-                vm.event.location.longitude = place.geometry.location.F;
-                vm.event.location.latitude = place.geometry.location.A;
-
-                setMapsUrl();
-            }
-
-            function getGoogleStaticMapsUrl(){
-                var longitude = vm.event.location.longitude;
-                var latitude = vm.event.location.latitude;
-                return 'https://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zooom=14&size=400x400&maptype=roadmap&markers=color:blue%7Clabel:A%7C' + latitude + ',' + longitude;
-            }
-
-            function setMapsUrl() {
-                vm.mapsUrl = getGoogleStaticMapsUrl();
+                vm.event.location.longitude = place.geometry.location.A;
+                vm.event.location.latitude = place.geometry.location.F;
             }
         });
 })();
-
 

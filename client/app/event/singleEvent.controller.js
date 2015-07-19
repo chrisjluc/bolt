@@ -141,7 +141,7 @@
 			function getGoogleStaticMapsUrl(){
 				var longitude = vm.event.location.longitude;
 				var latitude = vm.event.location.latitude;
-				return 'https://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zooom=10&size=400x300&maptype=roadmap&markers=color:red%7Clabel:A%7C' + latitude + ',' + longitude;
+				return 'https://maps.googleapis.com/maps/api/staticmap?center=' + longitude + ',' + latitude + '&zooom=10&size=400x300&maptype=roadmap&markers=color:red%7Clabel:A%7C' + longitude + ',' + latitude;
 			}
 
 			function getFormattedDate() {
