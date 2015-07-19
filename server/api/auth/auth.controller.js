@@ -9,7 +9,9 @@ var authController = {
 	authenticateUser: authenticateUser,
 	getPayPalUser: getPayPalUser,
 	ensureAuthenticated: ensureAuthenticated,
-	getBrainTreeClientToken: getBrainTreeClientToken
+	getBrainTreeClientToken: getBrainTreeClientToken,
+    getUser: getUser,
+    parseJoinToken: parseJoinToken
 };
 
 module.exports = authController;
@@ -25,6 +27,10 @@ function authenticateUser(req, res, next) {
 		{'scope': 'openid profile email https://uri.paypal.com/services/paypalattributes https://uri.paypal.com/services/expresscheckout'}
 	);
 	res.status(200).send(loginUrl);
+}
+
+function getUser(req, res) {
+    res.status(200).send(req.headers.user);
 }
 
 function getPayPalUser(req, res) {
@@ -116,4 +122,9 @@ function createToken(user) {
 		exp: moment().add(14, 'days').unix()
 	};
 	return jwt.encode(payload, config.TOKEN_SECRET);
+}
+
+function parseJoinToken(req, res, next) {
+    var decodedToken = jwt.decode(req.query.token, config.TOKEN_SECRET)
+    res.status(200).send(decodedToken.groupId);
 }

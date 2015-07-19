@@ -19,7 +19,16 @@ angular.module('boltApp', [
             .state('bolt', {
                 url: '/',
                 templateUrl: 'app/main/main.html',
-                controller: 'MainCtrl as Main'
+                controller: 'MainCtrl as Main',
+                resolve: {
+                    userData: ['dataResolver', 'auth', function(dataResolver, auth) {
+                        if (auth.isLoggedIn()) {
+                             return dataResolver.resolve('/api/auth/user');
+                        } else {
+                            return {};
+                        }
+                    }]
+                }
             })
             .state('bolt.signUp', {
                 url: 'signup',
@@ -94,4 +103,10 @@ angular.module('boltApp', [
                     }]
                 }
             })
+            .state('bolt.joinEvent', {
+                url: 'join/event/:token',
+                templateUrl: 'app/event/join.event.html',
+                controller: 'JoinEventCtrl as JoinEvent'
+            })
+
     });
