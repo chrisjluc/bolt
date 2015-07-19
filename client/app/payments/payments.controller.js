@@ -34,7 +34,9 @@
 						.post('/api/payments/pay', request)
 						.success(function (response) {
 							console.log(response);
-							location.reload();
+							vm.paidPayments = vm.payments;
+							vm.unpaidPayments = [];
+							vm.total = 0;
 						})
 						.error(function (error) {
 							console.error(error);

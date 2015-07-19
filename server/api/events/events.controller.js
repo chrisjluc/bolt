@@ -77,14 +77,6 @@ function createEvent(req, res, next) {
 		recurring: recurring
 	});
 
-	//_.forEach(participants, function (participant) {
-	//	var newParticipant = {
-	//		account: participant._id,
-	//		role: 'participant'
-	//	};
-	//	newEvent.users.push(newParticipant);
-	//});
-
 	newEvent.save(function (error, savedEvent) {
 		if (error) {
 			return next(error);

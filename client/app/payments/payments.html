@@ -1,23 +1,28 @@
 <div class="form-group form-group-lg" >
-    <label id="title" class="col-sm control-label">Transactions</label>
+    <label id="title" class="col-sm control-label">Donations</label>
 </div>
 <div class="col-md-12">
     <div class="col-md-6">
-        <div class="header">Unpaid</div>
-        <div class="payment-item" ng-repeat="unpaidPayment in Payment.unpaidPayments">
-            <span>Amount Owing: {{ unpaidPayment.amount }}</span>
+        <div class="payment-header">Pending</div>
+        <div class="c-paymentCard" ng-repeat="unpaidPayment in Payment.unpaidPayments">
+            <div><a ui-sref="bolt.eventView({ eventId: unpaidPayment.event._id })" ng-bind="::unpaidPayment.event.name"></a></div>
+            <div>{{ unpaidPayment.event.location.address }}</div>
+            <div>Amount Owing: ${{ unpaidPayment.amount }}</div>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="header">Paid</div>
-        <div class="payment-item" ng-repeat="paidPayment in Payment.paidPayments">
-            <span>Amount Paid: {{ paidPayment.amount }}</span>
+        <div class="payment-header">Completed</div>
+        <div class="c-paymentCard" ng-repeat="paidPayment in Payment.paidPayments">
+            <div><a ui-sref="bolt.eventView({ eventId: paidPayment.event._id })" ng-bind="::paidPayment.event.name"></a></div>
+            <div>{{ paidPayment.event.location.address }}</div>
+            <div>Amount donated: ${{ paidPayment.amount }}</div>
         </div>
     </div>
 </div>
 <div class="col-md-12">
     <form id="checkout">
         <div id="payment-form"></div>
-        <input type="submit" class="btn btn-grey" value="Pay {{Payment.total}}">
+        <button type="submit" ng-disabled="!Payment.total" class="btn btn-grey col-md-12">Donate - ${{Payment.total}}</button>
     </form>
 </div>
+
