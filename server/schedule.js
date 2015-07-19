@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var schedule = require('node-schedule');
 var Event = require('./models/event.model');
+var Payment = require('./models/payment.model');
 
 module.exports = {
 	init: init,
@@ -31,8 +32,17 @@ function scheduleEvent(event) {
 			console.log(event._id + " " + event.name + " event is being triggered");
 
 			_.forEach(event.users, function(user){
+        if(!user.on_time){
+          var newPayment = new Payment({
+            users: user._id,
+            event: event._id,
+            amount: event.lateFee,
+            status: 'unpaid'
+          });
+          newPayment.save();
+        }
+			});
 
-			})
 
 			// schedule recurring events again
 			scheduledJobs[event._id] = null;
