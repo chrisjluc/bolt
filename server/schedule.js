@@ -10,7 +10,7 @@ module.exports = {
 function init(){
 	Event.find({status: 'scheduled', start_date: {$gte: Date.now()}}, function(err, events){
 		if (err) return console.log(err);
-		_(events).forEach(function(event){
+		_.forEach(events, function(event){
 			scheduleEvent(event);
 		});
 	});

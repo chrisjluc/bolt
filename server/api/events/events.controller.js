@@ -8,7 +8,8 @@ var eventsController = {
 	modifyEvent: modifyEvent,
 	addUserToEvent: addUserToEvent,
 	removeUserFromEvent: removeUserFromEvent,
-	modifyUserInEvent: modifyUserInEvent
+	modifyUserInEvent: modifyUserInEvent,
+	checkIn: checkIn
 };
 
 module.exports = eventsController;
@@ -193,4 +194,56 @@ function modifyUserInEvent(req, res, next) {
 				event: newEvent
 			});
 		});
+}
+
+function checkIn(req, res) {
+	var userId = req.headers.user._id;
+	var userCoord = req.body.coordinates;
+	var eventId = req.params.eventId;
+
+	Event.findById(eventId, function (error, event) {
+		if (error) {
+			console.log(error);
+			return res.status(400).send(error);
+		}
+
+		var users = event.users;
+
+		var user = _.result(_.find(users, function(user) {
+			return user.account == userId;
+		}), 'user');
+
+		if(!user){
+			console.log('User does not exist in the event');
+			return res.status(400).send('User does not exist in the event');
+		}
+
+		var eventCoord = event.location.coordinates;
+
+		if (isCoordinateWithinThreshold(userCoord, eventCoord)) {
+			var query = {
+				_id: event._id
+			};
+
+			_.forEach(users, function (user) {
+				if (user.account == userId) {
+					user.on_time = true;
+				}
+			});
+
+			Event.findOneAndUpdate(query, {users: users}, function () {
+				return res.status(200).send('User has checkedin');
+			})
+		} else {
+			return res.status(400).send('User is not within threshold');
+		}
+	});
+}
+
+var degreeToMetre = 111120;
+var thresholdMetres = 100;
+
+function isCoordinateWithinThreshold(userCoord, eventCoord) {
+	return ((userCoord.longitude - eventCoord.longitude) ^ 2 +
+		(userCoord.latitude - eventCoord.latitude) ^ 2) ^ 0.5 * degreeToMetre < thresholdMetres;
 }
