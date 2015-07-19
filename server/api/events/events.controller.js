@@ -67,7 +67,11 @@ function createEvent(req, res, next) {
 			role: 'host'
 		}],
 		start_date: startDate,
-		location: location,
+		location: {
+			address: location.address,
+			longitude: location.longitude,
+			latitude: location.latitude
+		},
 		late_fee: lateFee,
 		status: 'scheduled',
 		recurring: recurring

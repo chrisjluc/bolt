@@ -24,6 +24,7 @@
 			vm.userIsHost = userIsHost;
 			vm.notSelf = notSelf;
 			vm.getShortLink = getShortLink;
+			vm.getGoogleStaticMapsUrl = getGoogleStaticMapsUrl;
 
 			var selfInEvent = findSelf();
 			if (!selfInEvent) {
@@ -116,6 +117,12 @@
 					.success(function (response) {
 						return response.data.url;
 					});
+			}
+
+			function getGoogleStaticMapsUrl(){
+				var longitude = vm.event.location.longitude;
+				var latitude = vm.event.location.latitude;
+				return 'https://maps.googleapis.com/maps/api/staticmap?center=' + longitude + ',' + latitude + '&zooom=12&size=400x400&maptype=roadmap&markers=color:red%7Clabel:A%7C' + longitude + ',' + latitude;
 			}
 		})
 })();
