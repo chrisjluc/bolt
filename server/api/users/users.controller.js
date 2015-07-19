@@ -3,6 +3,9 @@
 var _ = require('lodash');
 var async = require('async');
 var User = require('./../../models/user.model.js');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var config = require('../../config/environment');
 
 var usersController = {
     getUsers: getUsers,
@@ -33,6 +36,7 @@ function createUser(req, res, next) {
 
     async.waterfall([
         validateUserInfo,
+        checkIfEmailTaken,
         createNewUser
     ], finalCallback);
 
@@ -48,6 +52,21 @@ function createUser(req, res, next) {
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
         }
+    }
+
+    function checkIfEmailTaken(waterfallNext) {
+        User
+            .findOne({email: userEmail}, function(error, user) {
+                if (error) {
+                    console.error(error);
+                } else if (user) {
+                    var error = new Error();
+                    error.message = "Email is already taken!";
+                    return waterfallNext(error);
+                }
+
+                return waterfallNext(null);
+            })
     }
 
     function createNewUser(waterfallNext) {
@@ -75,7 +94,17 @@ function createUser(req, res, next) {
         }
 
         res.send({
-            user: user
+            user: user,
+            token: createToken(user)
         });
     }
+}
+
+function createToken(user) {
+    var payload = {
+        sub: user._id,
+        iat: moment().unix(),
+        exp: moment().add(14, 'days').unix()
+    };
+    return jwt.encode(payload, config.TOKEN_SECRET);
 }

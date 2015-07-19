@@ -23,14 +23,27 @@ function getBrainTreeClientToken(req, res) {
 }
 
 function authenticateUser(req, res, next) {
-	var loginUrl = paypal.openIdConnect.authorizeUrl(
-		{'scope': 'openid profile email https://uri.paypal.com/services/paypalattributes https://uri.paypal.com/services/expresscheckout'}
-	);
-	res.status(200).send(loginUrl);
-}
+	var email = req.body.email;
+	var password = req.body.password;
 
-function getUser(req, res) {
-    res.status(200).send(req.headers.user);
+	var query = {
+		email: email
+	};
+
+	User.
+		findOne(query, function (err, user) {
+			if (err) {
+				err = new Error('Error with authenticating user');
+				return next(err);
+			} else if (!_.isEqual(user.password, password)) {
+				return res.status(403).send('Wrong password');
+			} else {
+				return res.status(200).send({
+					user: user,
+					token: createToken(user)
+				});
+			}
+		});
 }
 
 function getPayPalUser(req, res) {

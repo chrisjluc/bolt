@@ -3,25 +3,31 @@
 
     angular
         .module('boltApp')
-        .controller('LoginCtrl', function ($scope, $http) {
+        .controller('LoginCtrl', function ($scope, $http, $auth) {
 
             var vm = this;
 
-            vm.payPalUrl = '';
+            vm.user = {
+                email: '',
+                password: ''
+            };
 
-            $http
-                .get('/api/auth')
-                .success(function(response) {
-                    vm.payPalUrl = response;
-                });
+            vm.login = login;
 
+            function login() {
+                var request = {
+                    email: vm.user.email,
+                    password: vm.user.password
+                };
 
-            vm.authenticatePayPal = authenticatePayPal;
-
-            function authenticatePayPal() {
-                //var windowParams = 'height=500,width=500,outerWidth=500,outerHeight=500';
-                var windowParams;
-                window.open(vm.payPalUrl, 'PayPal Login', windowParams);
+                $http
+                    .post('/api/auth', request)
+                    .success(function(response) {
+                        $auth.setToken(response.token);
+                    })
+                    .error(function(error) {
+                        console.log(error);
+                    });
             }
 
         });

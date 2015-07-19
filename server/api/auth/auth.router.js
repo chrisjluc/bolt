@@ -3,7 +3,7 @@ var AuthCtrl = require('./auth.controller.js');
 
 var router = express.Router();
 
-router.get('/', AuthCtrl.authenticateUser);
+router.post('/', AuthCtrl.authenticateUser);
 router.get('/user', AuthCtrl.ensureAuthenticated, AuthCtrl.getUser);
 router.get('/paypal-account/:code', AuthCtrl.getPayPalUser);
 router.get('/braintree-client-token', AuthCtrl.getBrainTreeClientToken);

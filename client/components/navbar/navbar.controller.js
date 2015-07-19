@@ -3,12 +3,14 @@
 
     angular
         .module('boltApp')
-        .controller('NavbarCtrl', function ($scope, $location, auth, $http) {
+        .controller('NavbarCtrl', function ($scope, $location, auth, $http, $state) {
             var vm = this;
 
             vm.loginText = 'Login';
+            vm.signUpText = 'Sign Up';
 
             vm.login = login;
+            vm.signUp = signUp;
             vm.isLoggedIn = isLoggedIn;
             vm.logout = logout;
 
@@ -17,13 +19,11 @@
             };
 
             function login() {
-                vm.loginText = 'Loading...';
+                $state.go('bolt.login');
+            }
 
-                $http
-                    .get('/api/auth')
-                    .success(function(response) {
-                        window.open(response, 'PayPal Login');
-                    });
+            function signUp() {
+                $state.go('bolt.signUp');
             }
 
             function isLoggedIn() {
