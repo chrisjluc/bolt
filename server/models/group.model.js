@@ -20,7 +20,7 @@ var groupSchema = {
       default: Date.now()
     },
     updated_date: {
-      type: Date,
+      type: Date
     }
 };
 

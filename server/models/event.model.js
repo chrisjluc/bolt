@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var eventSchema = {
+    name: String,
     users:  [{
         account: {
             type: mongoose.Schema.Types.ObjectId,
@@ -21,9 +22,17 @@ var eventSchema = {
         type: String,
         enum: [
             'scheduled',
-            'in-progress',
             'finished',
             'cancelled'
+        ]
+    },
+    recurring: {
+        type: String,
+        enum: [
+            'Daily',
+            'Weekly',
+            'Monthly',
+            'Yearly'
         ]
     },
     late_users: [mongoose.Schema.Types.ObjectId],
