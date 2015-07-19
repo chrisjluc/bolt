@@ -21,6 +21,11 @@ angular.module('boltApp', [
                 templateUrl: 'app/main/main.html',
                 controller: 'MainCtrl as Main'
             })
+            .state('bolt.signUp', {
+                url: 'signup',
+                templateUrl: 'app/signup/signup.html',
+                controller: 'SignUpCtrl as SignUp'
+            })
             .state('bolt.login', {
                 url: 'login',
                 templateUrl: 'app/auth/login.html',

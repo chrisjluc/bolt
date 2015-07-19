@@ -29,6 +29,7 @@ function createUser(req, res, next) {
     var userEmail = req.body.email;
     var firstName = req.body.first_name;
     var lastName = req.body.last_name;
+    var password = req.body.password;
 
     async.waterfall([
         validateUserInfo,
@@ -51,13 +52,15 @@ function createUser(req, res, next) {
 
     function createNewUser(waterfallNext) {
         var newUser = new User({
-          first_name: firstName,
-          last_name: lastName,
-          email: userEmail
+            first_name: firstName,
+            last_name: lastName,
+            email: userEmail,
+            password: password
         });
 
         newUser.save(function(error, savedUser) {
           if (error) {
+              console.error(error);
             error = new Error('Problems saving user.');
             return waterfallNext(error);
           }

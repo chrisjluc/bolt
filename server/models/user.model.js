@@ -4,9 +4,9 @@ var userSchema = mongoose.Schema({
     first_name: String,
     last_name: String,
     email: String,
+    password: String,
     user_id: {
         type: String,
-        required: true
     },
     friends: [{
         type: mongoose.Schema.Types.ObjectId,
