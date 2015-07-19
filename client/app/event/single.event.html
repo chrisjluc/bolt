@@ -2,10 +2,10 @@ Single
 
 <div>
     <h1 ng-bind="SingleEvent.event.name"></h1>
-    <tags-input ng-model="SingleEvent.tags">
+    <tags-input ng-model="SingleEvent.tags" placeholder="Enter Email">
         <auto-complete source="SingleEvent.userEmails"></auto-complete>
     </tags-input>
     <button ng-click="SingleEvent.inviteUsers()">Add Users</button>
-    <h2 ng-bind="SingleEvent.event.location"></h2>
+    <h2 ng-bind="SingleEvent.event.location.address"></h2>
     <h6 ng-bind="SingleEvent.event.joinToken"></h6>
 </div>

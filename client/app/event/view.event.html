@@ -1,5 +1,6 @@
-Event View
-
+<div class="form-group form-group-lg" >
+  <label id="title" class="col-sm control-label" >Events</label>
+</div>
 <div ng-repeat="event in Event.events">
     <div>
         <a ui-sref="bolt.eventView({ eventId: event._id })" ng-bind="event.name"></a>
