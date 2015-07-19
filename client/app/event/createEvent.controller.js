@@ -11,7 +11,11 @@
                 eventName: '',
                 start_date: '',
                 lateFee: 0,
-                location: '',
+                location: {
+                  address: '',
+                  longitude: 0,
+                  latitude: 0
+                },
                 participants: []
             };
 

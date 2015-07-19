@@ -5,7 +5,7 @@ Event View
         <a ui-sref="bolt.eventView({ eventId: event._id })" ng-bind="event.name"></a>
     </div>
     <div ng-bind="event.late_fee"></div>
-    <div ng-bind="event.location"></div>
+    <div ng-bind="event.location.address"></div>
     <div ng-bind="event.status"></div>
     <div ng-bind="event.users.length + ' users'"></div>
     <button type="button" ng-click= "Event.checkIn(event._id)">Check In</button>
