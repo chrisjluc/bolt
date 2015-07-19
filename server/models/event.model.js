@@ -16,7 +16,13 @@ var eventSchema = {
         }
     }],
     start_date: Date,
-    location: String,
+    location: {
+        name: String,
+        coordinates: {
+            longitute: Number,
+            latitute: Number
+        }
+    },
     late_fee: Number,
     status: {
         type: String,
