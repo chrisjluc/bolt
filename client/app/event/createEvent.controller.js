@@ -8,28 +8,29 @@
 
             vm.creatingEvent = creatingEvent;
             vm.getGoogleStaticMapsUrl = getGoogleStaticMapsUrl;
-            vm.event = {
+            vm.defaultEvent = {
                 eventName: '',
                 startDate: '',
                 lateFee: 0,
                 location: {
-                  address: '',
-                  latitude: 43.653226,
-                  longitude: -79.38318429999998
+                    address: '',
+                    longitude: 0,
+                    latitude: 0
                 },
                 participants: [],
                 recurring: 'None'
             };
+            vm.event = vm.defaultEvent;
 
-            initialize();
-            vm.mapsUrl = getGoogleStaticMapsUrl();
+            vm.creatingEvent = creatingEvent;
 
             function creatingEvent() {
-                var request = vm.event;
                 $http
-                    .post('/api/events', request)
+                    .post('/api/events', vm.event)
                     .success(function (response) {
-                        console.log(response);
+                        vm.event = vm.defaultEvent;
+                        vm.done = true;
+                        vm.newEventId = response.event._id;
                     })
                     .error(function (error) {
 
