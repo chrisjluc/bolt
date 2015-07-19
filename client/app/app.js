@@ -98,7 +98,7 @@ angular.module('boltApp', [
                     eventData: ['dataResolver', '$stateParams', function(dataResolver, $stateParams) {
                         return dataResolver.resolve('/api/events/' + $stateParams.eventId);
                     }],
-                    userData: ['dataResolver', function(dataResolver) {
+                    usersData: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/users');
                     }]
                 }
