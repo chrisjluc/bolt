@@ -57,6 +57,9 @@ angular.module('boltApp', [
                 resolve: {
                     payments: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/payments');
+                    }],
+                    clientToken: ['dataResolver', function(dataResolver) {
+                        return dataResolver.resolve('/api/payments/client-token');
                     }]
                 }
             })

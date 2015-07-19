@@ -11,15 +11,6 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 var schedule = require('./schedule');
-var braintree = require('braintree');
-
-// setup brain tree
-var gateway = braintree.connect({
-    environment: braintree.Environment.Sandbox,
-    merchantId: "pdqfv2v9hfpvbpbr",
-    publicKey: "mcq2qbg8tsk4t9nx",
-    privateKey: "5ed9a560094ed7d3d5f6aa86c3c7d7cb"
-});
 
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);

@@ -3,10 +3,11 @@
 
 	angular
 		.module('boltApp')
-		.controller('PaymentsCtrl', function ($scope, $http, paymentsData) {
+		.controller('PaymentsCtrl', function ($scope, $http, paymentsData, clientToken) {
 			var vm = this;
 
 			vm.payments = paymentsData;
+			vm.clientToken = clientToken;
 			vm.unpaidPayments = filterPayments('unpaid');
 			vm.paidPayments = filterPayments('paid');
 
@@ -15,6 +16,10 @@
 					return payment.status === status;
 				});
 			}
+
+			braintree.setup(vm.clientToken, "dropin", {
+				container: "payment-form"
+			});
 		});
 })();
 
