@@ -15,7 +15,7 @@ module.exports = authController;
 
 function authenticateUser(req, res, next) {
     var loginUrl = paypal.openIdConnect.authorizeUrl(
-        {'scope': 'openid profile email'}
+        {'scope': 'openid profile email https://uri.paypal.com/services/paypalattributes https://uri.paypal.com/services/expresscheckout'}
     );
 
     res.status(200).send(loginUrl);
