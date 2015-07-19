@@ -1,5 +1,6 @@
 var _ = require('lodash');
-var Event = require('./../../models/event.model.js');
+var Event = require('../../models/event.model.js');
+var schedule = require('../../schedule');
 
 var eventsController = {
 	getEvents: getEvents,
@@ -64,6 +65,8 @@ function createEvent(req, res, next) {
 		if (error) {
 			return next(error);
 		}
+
+		schedule.scheduleEvent(savedEvent);
 
 		return res.status(200).send({
 			event: savedEvent
