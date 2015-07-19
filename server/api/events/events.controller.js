@@ -279,7 +279,7 @@ function checkIn(req, res) {
 		var users = event.users;
 
 		var user = _.result(_.find(users, function (user) {
-			return user.account == userId;
+			return user.account.toString() === userId;
 		}), 'user');
 
 		if (!user) {

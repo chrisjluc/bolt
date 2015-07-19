@@ -1,23 +1,29 @@
 (function () {
-    'use strict';
+	'use strict';
 
-    angular
-        .module('boltApp')
-        .controller('EventCtrl', function (events) {
-            var vm = this;
+	angular
+		.module('boltApp')
+		.controller('EventCtrl', function (events, $http) {
+			var vm = this;
 
-            vm.events = events;
+			vm.events = events;
 
-            vm.checkIn = checkIn;
+			vm.checkIn = checkIn;
 
-            function checkIn(eventId) {
-              $http
-                .patch('./eventID/checkin', request)
-                .success(function (response) {
-                  console.log(response);
-                })
-                .error(function (error) {
-                })
-            }
-        });
+			function checkIn(eventId) {
+				var request = {
+					coordinates: {
+						latitude: '',
+						longitude: ''
+					}
+				};
+				$http
+					.patch('api/events/' + eventId + '/checkin', request)
+					.success(function (response) {
+						console.log(response);
+					})
+					.error(function (error) {
+					})
+			}
+		});
 })();
