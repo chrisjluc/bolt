@@ -10,11 +10,13 @@ Single
             ng-click="SingleEvent.leaveEvent()">Leave Event</button>
     <h2 ng-bind="SingleEvent.event.location.address"></h2>
     <h6 ng-bind="SingleEvent.event.joinToken"></h6>
+    <h3 ng-bind="'Total Owing: $' + SingleEvent.totalOwing"></h3>
 
     <h2>Attendees</h2>
     <div ng-repeat="user in SingleEvent.event.users">
         {{user.account.first_name}} {{user.account.last_name}}<br>
-        {{user.role}}<br> <button ng-if="SingleEvent.userIsHost() && SingleEvent.notSelf(user)"
+        {{user.role}}<br>
+        <button ng-if="SingleEvent.userIsHost() && SingleEvent.notSelf(user)"
                                   ng-click="SingleEvent.removeUser(user)">Remove</button>
         -----------------------------------------------------------
     </div>

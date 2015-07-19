@@ -9,10 +9,14 @@
 
             vm.event = eventData;
             vm.users = usersData.users;
+            vm.payments = paymentsData;
             vm.userEmails = _.map(vm.users, function (user) {
                 return user.email;
             });
             vm.tags = [];
+            vm.totalOwing = getTotalOwing();
+
+            console.log(vm.payments);
 
             vm.inviteUsers = inviteUsers;
             vm.leaveEvent = leaveEvent;
@@ -25,7 +29,15 @@
                 $state.go('bolt');
             }
 
-            console.log(paymentsData);
+            function getTotalOwing() {
+                var owingBalance = 0;
+                _.forEach(vm.payments, function (payment) {
+                    if (payment.status === 'unpaid') {
+                        owingBalance += payment.amount;
+                    }
+                });
+                return owingBalance;
+            }
 
             function inviteUsers() {
                 var emails = _.map(vm.tags, function (tag) {
@@ -53,13 +65,13 @@
                 var userId = userData._id;
                 $http
                     .delete('/api/events/' + vm.event._id + '/users/' + userId)
-                    .success(function(response){
-                        _.remove(vm.event.users, function(user) {
+                    .success(function (response) {
+                        _.remove(vm.event.users, function (user) {
                             return user.account._id === userId;
                         });
                         $state.go('bolt');
                     })
-                    .error(function(error){
+                    .error(function (error) {
 
                     });
             }
@@ -68,12 +80,12 @@
                 var userToRemove = user.account._id;
                 $http
                     .delete('/api/events/' + vm.event._id + '/users/' + userToRemove)
-                    .success(function(response){
-                        _.remove(vm.event.users, function(user) {
+                    .success(function (response) {
+                        _.remove(vm.event.users, function (user) {
                             return user.account._id === userToRemove;
                         });
                     })
-                    .error(function(error){
+                    .error(function (error) {
 
                     });
             }
@@ -85,7 +97,7 @@
             }
 
             function findSelf() {
-                return _.find(vm.event.users, function(user) {
+                return _.find(vm.event.users, function (user) {
                     return user.account._id === userData._id;
                 });
             }

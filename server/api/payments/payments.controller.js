@@ -14,7 +14,7 @@ var paymentsController = {
 module.exports = paymentsController;
 
 function getEventUnpaidFees(req, res, next) {
-    var eventId = req.query.eventId;
+    var eventId = req.params.eventId;
     var query = { event: eventId, status: 'unpaid' };
 
     Payment.find(query, function(error, payments) {
