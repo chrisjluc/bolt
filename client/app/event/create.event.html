@@ -1,1 +1,8 @@
-Create Event
+Create Event <br />
+Event Name: <label for="eventName"></label><input id="eventName" ng-model="CreateEvent.event.eventName"><br/>
+Event Date: <label for="eventDate"></label><input type="datetime-local" id="eventDate" ng-model="CreateEvent.event.start_date"> <br />
+Late Fee: <label for="lateFee"></label><input type="number" id="lateFee" ng-model="CreateEvent.event.lateFee"> <br />
+Location: <label for="location"></label><input id="location" ng-model="CreateEvent.event.location"> <br/>
+Add Participants: <input type="text" id="participants" ng-model="CreateEvent.event.participants">
+
+<button type="button" ng-click= "CreateEvent.creatingEvent()">Create Event</button>
