@@ -36,35 +36,35 @@ function getEvents(req, res, next) {
 			var twoMinAgo = new Date();
 			twoMinAgo.setSeconds(twoMinAgo.getSeconds() - 5 * 60);
 
-            _.forEach(events, function(event){
-                event._doc.allowCheckIn = now < event.start_date && event.start_date >= twoMinAgo;
-            });
+			_.forEach(events, function (event) {
+				event._doc.allowCheckIn = now < event.start_date && event.start_date >= twoMinAgo;
+			});
 
-            return res.status(200).send(events);
-        });
+			return res.status(200).send(events);
+		});
 }
 
 function createEvent(req, res, next) {
-    var userId = req.headers.user._id;
-    var eventName = req.body.eventName;
-    var participants = req.body.participants;
-    var startDate = req.body.startDate;
-    var location = req.body.location;
-    var lateFee = req.body.lateFee;
-    var recurring = req.body.recurring;
+	var userId = req.headers.user._id;
+	var eventName = req.body.eventName;
+	var participants = req.body.participants;
+	var startDate = req.body.startDate;
+	var location = req.body.location;
+	var lateFee = req.body.lateFee;
+	var recurring = req.body.recurring;
 
-    var newEvent = new Event({
-        name: eventName,
-        users: [{
-            account: userId,
-            role: 'host'
-        }],
-        start_date: startDate,
-        location: location,
-        late_fee: lateFee,
-        status: 'scheduled',
-        recurring: recurring
-    });
+	var newEvent = new Event({
+		name: eventName,
+		users: [{
+			account: userId,
+			role: 'host'
+		}],
+		start_date: startDate,
+		location: location,
+		late_fee: lateFee,
+		status: 'scheduled',
+		recurring: recurring
+	});
 
 	//_.forEach(participants, function (participant) {
 	//	var newParticipant = {
@@ -95,19 +95,19 @@ function getEvent(req, res, next) {
 		generateJoinToken
 	], finalCallback);
 
-    function findEvent(waterfallNext) {
-        Event
-            .findById(eventId)
-            .populate('users.account')
-            .exec(function (error, event) {
-                if (error) {
-                    error = new Error('Could not find event');
-                    return next(error);
-                }
+	function findEvent(waterfallNext) {
+		Event
+			.findById(eventId)
+			.populate('users.account')
+			.exec(function (error, event) {
+				if (error) {
+					error = new Error('Could not find event');
+					return next(error);
+				}
 
-                waterfallNext(error, event);
-            });
-    }
+				waterfallNext(error, event);
+			});
+	}
 
 	function generateJoinToken(event, waterfallNext) {
 		var payload = {
@@ -276,13 +276,11 @@ function checkIn(req, res) {
 			return res.status(400).send(error);
 		}
 
-		var users = event.users;
+		var userExists = _.filter(event.users, function (user) {
+			return user.account.equals(userId);
+		});
 
-		var user = _.result(_.find(users, function (user) {
-			return user.account.toString() === userId;
-		}), 'user');
-
-		if (!user) {
+		if (userExists.length <= 0) {
 			console.log('User does not exist in the event');
 			return res.status(400).send('User does not exist in the event');
 		}
@@ -294,13 +292,15 @@ function checkIn(req, res) {
 				_id: event._id
 			};
 
-			_.forEach(users, function (user) {
-				if (user.account == userId) {
-					user.on_time = true;
-				}
-			});
-
-			Event.findOneAndUpdate(query, {users: users}, function () {
+			Event.findOneAndUpdate(query, {
+				users: _.map(event.users, function (user) {
+					if (user.account.equals(userId)) {
+						user.on_time = true;
+					}
+					return user;
+				})
+			}, function (err) {
+				if (err) return console.error(err);
 				console.log('User has checkedin');
 				return res.status(200).send('User has checkedin');
 			})
