@@ -20,6 +20,25 @@
 @import 'modal/modal.less';
 // endinjector
 
+a {
+    color: #404040;
+
+    &:hover {
+        color: darken(#404040, 10%);
+    }
+}
+
+body {
+    padding: 70px 0 0 0;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
 .navbar .container {
     position: relative;
 }
@@ -33,4 +52,5 @@
 
 .c-authControl a {
     cursor: pointer;
+    padding: 0 0 0 10px;
 }

@@ -3,7 +3,10 @@
 
     angular
         .module('boltApp')
-        .controller('MainCtrl', function ($scope, $http) {
+        .controller('MainCtrl', function (auth) {
+            var vm = this;
+            
+            vm.isLoggedIn = auth.isLoggedIn;
 
         });
 })();

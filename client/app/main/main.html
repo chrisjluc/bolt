@@ -3,21 +3,20 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-2">
-            <ul class="c-stackedNavigation">
+            <ul ng-if="Main.isLoggedIn()" class="c-stackedNavigation">
                 <!--<li class="c-stackedNavigation-item">-->
-                <!--<a ui-sref="bolt.groupsView">-->
-                <!--Groups-->
-                <!--</a>-->
+                    <!--<a ui-sref="bolt.groupsView">-->
+                        <!--Groups-->
+                    <!--</a>-->
                 <!--</li>-->
-                <li class="c-stackedNavigation-item">
-                    <a ui-sref="bolt.eventsView">
-                        Events
-                    </a>
+                <li class="c-stackedNavigation-item" ui-sref="bolt.createEvent" ui-sref-active="is-selected">
+                    Create Event
                 </li>
-                <li class="c-stackedNavigation-item">
-                    <a ui-sref="bolt.paymentsView">
-                        Payments
-                    </a>
+                <li class="c-stackedNavigation-item" ui-sref="bolt.eventsView" ui-sref-active="is-selected">
+                    Events
+                </li>
+                <li class="c-stackedNavigation-item" ui-sref="bolt.paymentsView" ui-sref-active="is-selected">
+                    Payments
                 </li>
             </ul>
         </div>
@@ -25,7 +24,6 @@
 
         </div>
         <div class="col-sm-2">
-            Extras
         </div>
     </div>
 </div>
