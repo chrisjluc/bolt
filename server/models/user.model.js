@@ -15,12 +15,7 @@ var userSchema = mongoose.Schema({
     created_date: {
         type: Date,
         default: Date.now()
-    },
-    token_expiry_date: {
-        type: Date
-    },
-    access_token: String,
-    refresh_token: String
+    }
 });
 
 var User = mongoose.model('User', userSchema);
