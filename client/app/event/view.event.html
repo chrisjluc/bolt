@@ -1,8 +1,10 @@
-View Event
+Event View
 
-Date: <label id="eventDate" ng-model=""></label>
-Time: <label id="eventTime" ng-model=""></label> <br />
-Location: <label id="location" ng-model=""></label> <br />
-Host: <label id="host" ng-model=""></label> <br />
-Event Created: <label id="createdDate" ng-model=""></label> <br />
-<button type="button" ng-click= "Event.checkIn()">Check In</button>
+<div ng-repeat="event in Event.events">
+    <div ng-bind="event.name"></div>
+    <div ng-bind="event.late_fee"></div>
+    <div ng-bind="event.location"></div>
+    <div ng-bind="event.status"></div>
+    <div ng-bind="event.users.length + ' users'"></div>
+    <button type="button" ng-click= "Event.checkIn(event._id)">Check In</button>
+</div>

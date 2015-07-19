@@ -26,9 +26,7 @@ function getEvents(req, res, next) {
 				return next(error);
 			}
 
-			return res.status(200).send({
-				events: events
-			});
+			return res.status(200).send(events);
 		});
 }
 

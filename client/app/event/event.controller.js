@@ -1,16 +1,18 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  angular
-    .module('boltApp')
-    .controller('EventCtrl', function ($scope, $http) {
-      var vm = this;
+    angular
+        .module('boltApp')
+        .controller('EventCtrl', function (events) {
+            var vm = this;
 
-      vm.checkIn = checkIn;
+            vm.events = events;
 
-      function checkIn(){
+            vm.checkIn = checkIn;
 
-      }
+            function checkIn(eventId) {
+                console.log(eventId);
+            }
 
-    });
+        });
 })();

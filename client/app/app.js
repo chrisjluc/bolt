@@ -41,21 +41,28 @@ angular.module('boltApp', [
                 controller: 'CreateGroupCtrl as CreateGroup'
             })
             .state('bolt.groupView', {
-                url: 'group',
+                url: 'groups',
                 templateUrl: 'app/group/view.group.html',
                 controller: 'GroupCtrl as Group',
                 resolve: {
                     groups: ['dataResolver', function(dataResolver) {
-                        return dataResolver.resolve('/api/groups')
+                        return dataResolver.resolve('/api/groups');
                     }]
                 }
             })
             .state('bolt.createEvent', {
                 url: 'create/event',
-                templateUrl: 'app/event/create.event.html'
+                templateUrl: 'app/event/create.event.html',
+                controller: 'CreateEventCtrl as CreateEvent'
             })
             .state('bolt.eventView', {
-                url: 'event/:eventId',
-                templateUrl: 'app/event/view.event.html'
+                url: 'events',
+                templateUrl: 'app/event/view.event.html',
+                controller: 'EventCtrl as Event',
+                resolve: {
+                    events: ['dataResolver', function(dataResolver) {
+                        return dataResolver.resolve('/api/events');
+                    }]
+                }
             })
     });
