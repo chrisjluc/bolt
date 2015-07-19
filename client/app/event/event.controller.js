@@ -11,17 +11,15 @@
 			vm.checkIn = checkIn;
 
 			function checkIn(eventId) {
-				var request = {
-					coordinates: {
-						latitude: '',
-						longitude: ''
-					}
-				};
         navigator.geolocation.getCurrentPosition(successCallback);
 
         function successCallback(position) {
-          vm.event.latitude = position.coords.latitude;
-          vm.event.longitude = position.coords.longitude;
+          var request = {
+            coordinates: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }
+          };
           $http
             .patch('api/events/' + eventId + '/checkin', request)
             .success(function (response) {
