@@ -1,5 +1,7 @@
 Groups
 
 <div ng-repeat="group in Group.groups">
-    {{group.name}}
+    <div>
+        <a ui-sref="bolt.groupView({ groupId: group._id })" ng-bind="::group.name"></a>
+    </div>
 </div>

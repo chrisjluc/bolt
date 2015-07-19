@@ -5,7 +5,8 @@ var groupsController = {
     getGroups: getGroups,
     createGroup: createGroup,
     addUserToGroup: addUserToGroup,
-    removeUserFromGroup: removeUserFromGroup
+    removeUserFromGroup: removeUserFromGroup,
+    getGroup: getGroup
 };
 
 module.exports = groupsController;
@@ -17,7 +18,7 @@ function getGroups(req, res, next) {
     };
 
     Group
-        .find(query, function(error, groups) {
+        .find(query, function (error, groups) {
             if (error) {
                 error = new Error('Some error when finding groups.');
                 return next(error);
@@ -40,7 +41,7 @@ function createGroup(req, res, next) {
         }]
     });
 
-    _.forEach(groupMembers, function(member) {
+    _.forEach(groupMembers, function (member) {
         var newMember = {
             account: member._id,
             role: 'member'
@@ -48,14 +49,15 @@ function createGroup(req, res, next) {
         newGroup.users.push(newMember);
     });
 
-    newGroup.save(function(error, savedGroup) {
+    newGroup.save(function (error, savedGroup) {
         if (error) {
             error = new Error("Could not create new group.");
             return next(error);
         }
 
         return res.status(200).send({
-            group: savedGroup});
+            group: savedGroup
+        });
     })
 }
 
@@ -109,4 +111,17 @@ function removeUserFromGroup(req, res, next) {
                 event: newEvent
             });
         });
+}
+
+function getGroup(req, res, next) {
+    var groupId = req.params.id;
+
+    Group.findById(groupId, function(error, group) {
+        if (error) {
+            error = new Error('Could not find group');
+            return next(error);
+        }
+}
+        return res.status(200).send(group);
+    });
 }

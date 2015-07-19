@@ -40,13 +40,23 @@ angular.module('boltApp', [
                 templateUrl: 'app/group/create.group.html',
                 controller: 'CreateGroupCtrl as CreateGroup'
             })
-            .state('bolt.groupView', {
+            .state('bolt.groupsView', {
                 url: 'groups',
                 templateUrl: 'app/group/view.group.html',
                 controller: 'GroupCtrl as Group',
                 resolve: {
                     groups: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/groups');
+                    }]
+                }
+            })
+            .state('bolt.groupView', {
+                url: 'group/:groupId',
+                templateUrl: 'app/group/single.group.html',
+                controller: 'SingleGroupCtrl as SingleGroup',
+                resolve: {
+                    groupData: ['dataResolver', '$stateParams', function(dataResolver, $stateParams) {
+                        return dataResolver.resolve('/api/groups/' + $stateParams.groupId);
                     }]
                 }
             })
