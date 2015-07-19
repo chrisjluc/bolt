@@ -11,8 +11,13 @@
             vm.checkIn = checkIn;
 
             function checkIn(eventId) {
-                console.log(eventId);
+              $http
+                .patch('./eventID/checkin', request)
+                .success(function (response) {
+                  console.log(response);
+                })
+                .error(function (error) {
+                })
             }
-
         });
 })();
