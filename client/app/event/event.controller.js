@@ -35,22 +35,33 @@
 						.patch('api/events/' + eventId + '/checkin', request)
 						.success(function (response) {
 							vm.buttonIdLoading = '';
+							console.log(response);
+
+							var modifiedEvent = _.find(vm.events, function(event) {
+								return event._id === eventId;
+							});
+
+							modifiedEvent.checked = true;
+							modifiedEvent.allowCheckIn = false;
+							modifiedEvent.validCheckIn = true;
 						})
 						.error(function (error) {
 							vm.buttonIdLoading = '';
-						})
+							console.log(error);
+
+							var modifiedEvent = _.find(vm.events, function(event) {
+								return event._id === eventId;
+							});
+
+							modifiedEvent.checked = true;
+							modifiedEvent.allowCheckIn = false;
+							modifiedEvent.validCheckIn = false;
+						});
 				}
 			}
 
 			function isButtonLoading(eventId) {
 				return _.isEqual(vm.buttonIdLoading, eventId);
-			}
-
-			function toggleAsyncButton(button) {
-				var button = vm.asyncButtons[button];
-
-				button.disabled = !button.disabled;
-				button.text = button.disabled ? button.disabledText : button.enabledText;
 			}
 		});
 })();

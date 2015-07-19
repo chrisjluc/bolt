@@ -314,7 +314,7 @@ function checkIn(req, res) {
 }
 
 var degreeToMetre = 111120;
-var thresholdMetres = 100;
+var thresholdMetres = 250;
 
 function isCoordinateWithinThreshold(userCoord, eventCoord) {
 	return Math.sqrt((Math.pow((userCoord.longitude - eventCoord.longitude), 2) +

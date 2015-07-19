@@ -14,10 +14,13 @@
     <div ng-bind="::'Late Fee: $' + event.late_fee"></div>
     <div ng-bind="::event.status"></div>
     <div ng-bind="::event.users.length + ' members'"></div>
-    <button ng-if="::event.allowCheckIn"
+    <button ng-if="event.allowCheckIn"
             ng-disabled="Event.isButtonLoading(event._id)"
             type="button" class="c-eventCard-checkIn btn btn-grey"
             ng-click="Event.checkIn(event._id)"
             ng-bind="Event.isButtonLoading(event._id) ? 'Checking in...' : 'Check in'">
     </button>
+    <div ng-if="event.checked" class="c-eventCard-checkIn c-eventCard-bolt">
+        <i class="fa fa-bolt" ng-class="{ 'success' : event.validCheckIn, 'fail': !event.validCheckIn }"></i>
+    </div>
 </div>
