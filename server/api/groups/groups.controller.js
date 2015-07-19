@@ -3,7 +3,9 @@ var Group = require('./../../models/group.model.js');
 
 var groupsController = {
     getGroups: getGroups,
-    createGroup:createGroup
+    createGroup: createGroup,
+    addUserToGroup: addUserToGroup,
+    removeUserFromGroup: removeUserFromGroup
 };
 
 module.exports = groupsController;
@@ -55,4 +57,56 @@ function createGroup(req, res, next) {
         return res.status(200).send({
             group: savedGroup});
     })
+}
+
+function addUserToGroup(req, res, next) {
+    var groupId = req.params.groupId;
+    var userToAdd = req.params.userId;
+    var update = {
+        $addToSet: {
+            users: {
+                account: userToAdd,
+                role: 'member'
+            }
+        }
+    };
+    var options = {'new': true, runValidators: true};
+
+    Group
+        .findByIdAndUpdate(groupId, update, options, function (error, newEvent) {
+            if (error) {
+                error = new Error('Problem with updating event.');
+                return next(error);
+            }
+
+            res.status(200).send({
+                event: newEvent
+            });
+        });
+}
+
+function removeUserFromGroup(req, res, next) {
+    var groupId = req.params.groupId;
+    var userToRemove = req.params.userId;
+    var update = {
+        $pull: {
+            users: {
+                account: userToRemove,
+                role: 'member'
+            }
+        }
+    };
+    var options = {'new': true, runValidators: true};
+
+    Group
+        .findByIdAndUpdate(groupId, update, options, function (error, newEvent) {
+            if (error) {
+                error = new Error('Problem with updating event.');
+                return next(error);
+            }
+
+            res.status(200).send({
+                event: newEvent
+            });
+        });
 }

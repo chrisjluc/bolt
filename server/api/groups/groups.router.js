@@ -5,5 +5,7 @@ var router = express.Router();
 
 router.get('/', GroupsCtrl.getGroups);
 router.post('/', GroupsCtrl.createGroup);
+router.put('/:groupId/users/:userId', GroupsCtrl.addUserToGroup);
+router.delete('/:groupId/users/:userId', GroupsCtrl.removeUserFromGroup);
 
 module.exports = router;
