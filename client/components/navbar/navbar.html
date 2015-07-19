@@ -4,10 +4,12 @@
             <a href="/" class="navbar-brand">Bolt</a>
         </div>
         <div class="c-authControl">
-            <a ng-if="!Navbar.isLoggedIn()" ng-click="Navbar.login()" ng-bind="Navbar.loginText"></a>
-            <a ng-if="!Navbar.isLoggedIn()" ng-click="Navbar.signUp()" ng-bind="Navbar.signUpText"></a>
+            <div ng-if="!Navbar.isLoggedIn()">
+                <a ng-click="Navbar.login()" ng-bind="Navbar.loginText"></a>
+                <a ng-click="Navbar.signUp()" ng-bind="Navbar.signUpText"></a>
+            </div>
             <div ng-if="Navbar.isLoggedIn()">
-                <a ui-sref="bolt.createGroup">Create Group</a>
+                <!--<a ui-sref="bolt.createGroup">Create Group</a>-->
                 <a ui-sref="bolt.createEvent">Create Event</a>
                 <a ng-click="Navbar.logout()">Log out</a>
             </div>
