@@ -61,17 +61,6 @@ function scheduleEvent(event) {
 				schedule.scheduledJobs[event._id] = null;
 
 				event.start_date.setSeconds(event.start_date.getSeconds() + recurringSeconds[event.recurring]);
-				_.forEach(event.users, function (user) {
-					if (!user.on_time) {
-						console.log(event.name + ' event, a user was charged $' + event.late_fee);
-						var newPayment = new Payment({
-							users: user._id,
-							event: event._id,
-							amount: event.late_fee
-						});
-						newPayment.save();
-					}
-				});
 
 				var update = {
 					start_date: event.start_date + recurringSeconds[event.recurring],
