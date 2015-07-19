@@ -8,8 +8,7 @@ var eventsController = {
 	modifyEvent: modifyEvent,
 	addUserToEvent: addUserToEvent,
 	removeUserFromEvent: removeUserFromEvent,
-	addUserToLateList: addUserToLateList,
-	removeUserFromLateList: removeUserFromLateList
+	modifyUserInEvent: modifyUserInEvent
 };
 
 module.exports = eventsController;
@@ -21,7 +20,7 @@ function getEvents(req, res, next) {
 	};
 
 	Event
-		.find(query, function(error, events) {
+		.find(query, function (error, events) {
 			if (error) {
 				error = new Error('Some error when finding events.');
 				return next(error);
@@ -169,43 +168,26 @@ function removeUserFromEvent(req, res, next) {
 		});
 }
 
-function addUserToLateList(req, res, next) {
-	var eventId = req.params.eventId;
-	var userToAdd = req.params.userId;
-	var update = {
-		$push: {
-			late_users: userToAdd
-		}
+function modifyUserInEvent(req, res, next) {
+	var VALID_FIELDS = ['role', 'on_time'];
+	var userToModify = req.params.userId;
+	var query = {
+		'users.account': userToModify
 	};
+	var update = {};
 	var options = {'new': true, runValidators: true};
 
-	Event
-		.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
-			if (error) {
-				error = new Error('Problem with updating event.');
-				return next(error);
-			}
-
-			res.status(200).send({
-				event: newEvent
-			});
-		});
-}
-
-function removeUserFromLateList(req, res, next) {
-	var eventId = req.params.eventId;
-	var userToRemove = req.params.userId;
-	var update = {
-		$pull: {
-			late_users: userToRemove
+	_.forEach(eventFields, function (fieldName) {
+		var isValidField = _.contains(VALID_FIELDS, fieldName);
+		if (isValidField) {
+			update[fieldName] = requestedModification[fieldName];
 		}
-	};
-	var options = {'new': true, runValidators: true};
+	});
 
 	Event
-		.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
+		.findOneAndUpdate(query, update, options, function (error, newEvent) {
 			if (error) {
-				error = new Error('Problem with updating event.');
+				error = new Error('Problem with updating user in event.');
 				return next(error);
 			}
 

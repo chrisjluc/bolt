@@ -13,6 +13,10 @@ var eventSchema = {
               'host',
               'participant'
             ]
+        },
+        on_time: {
+            type: Boolean,
+            default: false
         }
     }],
     start_date: Date,
@@ -41,7 +45,6 @@ var eventSchema = {
             'Yearly'
         ]
     },
-    late_users: [mongoose.Schema.Types.ObjectId],
     created_date: {
         type: Date,
         default: Date.now()
