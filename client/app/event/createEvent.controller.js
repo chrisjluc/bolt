@@ -9,7 +9,7 @@
             vm.creatingEvent = creatingEvent;
             vm.event = {
                 eventName: '',
-                start_date: '',
+                startDate: '',
                 lateFee: 0,
                 location: {
                   address: '',
