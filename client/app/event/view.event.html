@@ -1,7 +1,9 @@
 Event View
 
 <div ng-repeat="event in Event.events">
-    <div ng-bind="event.name"></div>
+    <div>
+        <a ui-sref="bolt.eventView({ eventId: event._id })" ng-bind="event.name"></a>
+    </div>
     <div ng-bind="event.late_fee"></div>
     <div ng-bind="event.location"></div>
     <div ng-bind="event.status"></div>

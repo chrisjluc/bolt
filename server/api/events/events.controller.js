@@ -3,247 +3,260 @@ var Event = require('../../models/event.model.js');
 var schedule = require('../../schedule');
 
 var eventsController = {
-	getEvents: getEvents,
-	createEvent: createEvent,
-	modifyEvent: modifyEvent,
-	addUserToEvent: addUserToEvent,
-	removeUserFromEvent: removeUserFromEvent,
-	modifyUserInEvent: modifyUserInEvent,
-	checkIn: checkIn
+    getEvents: getEvents,
+    createEvent: createEvent,
+    getEvent: getEvent,
+    modifyEvent: modifyEvent,
+    addUserToEvent: addUserToEvent,
+    removeUserFromEvent: removeUserFromEvent,
+    modifyUserInEvent: modifyUserInEvent,
+    checkIn: checkIn
 };
 
 module.exports = eventsController;
 
 function getEvents(req, res, next) {
-	var userId = req.headers.user._id;
-	var query = {
-		'users.account': userId
-	};
+    var userId = req.headers.user._id;
+    var query = {
+        'users.account': userId
+    };
 
-	Event
-		.find(query, function (error, events) {
-			if (error) {
-				error = new Error('Some error when finding events.');
-				return next(error);
-			}
+    Event
+        .find(query, function (error, events) {
+            if (error) {
+                error = new Error('Some error when finding events.');
+                return next(error);
+            }
 
-			return res.status(200).send(events);
-		});
+            return res.status(200).send(events);
+        });
 }
 
 function createEvent(req, res, next) {
-	var userId = req.headers.user._id;
-	var eventName = req.body.eventName;
-	var participants = req.body.participants;
-	var startDate = req.body.startDate;
-	var location = req.body.location;
-	var lateFee = req.body.lateFee;
+    var userId = req.headers.user._id;
+    var eventName = req.body.eventName;
+    var participants = req.body.participants;
+    var startDate = req.body.startDate;
+    var location = req.body.location;
+    var lateFee = req.body.lateFee;
 
-	var newEvent = new Event({
-		name: eventName,
-		users: [{
-			account: userId,
-			role: 'host'
-		}],
-		start_date: startDate,
-		location: location,
-		late_fee: lateFee,
-		status: 'scheduled'
-	});
+    var newEvent = new Event({
+        name: eventName,
+        users: [{
+            account: userId,
+            role: 'host'
+        }],
+        start_date: startDate,
+        location: location,
+        late_fee: lateFee,
+        status: 'scheduled'
+    });
 
-	_.forEach(participants, function (participant) {
-		var newParticipant = {
-			account: participant._id,
-			role: 'participant'
-		};
-		newEvent.users.push(newParticipant);
-	});
+    _.forEach(participants, function (participant) {
+        var newParticipant = {
+            account: participant._id,
+            role: 'participant'
+        };
+        newEvent.users.push(newParticipant);
+    });
 
-	newEvent.save(function (error, savedEvent) {
-		if (error) {
-			return next(error);
-		}
+    newEvent.save(function (error, savedEvent) {
+        if (error) {
+            return next(error);
+        }
 
-		schedule.scheduleEvent(savedEvent);
+        schedule.scheduleEvent(savedEvent);
 
-		return res.status(200).send({
-			event: savedEvent
-		})
-	})
+        return res.status(200).send({
+            event: savedEvent
+        })
+    })
+}
+
+function getEvent(req, res, next) {
+    var eventId = req.params.eventId;
+
+    Event.findById(eventId, function (error, event) {
+        if (error) {
+            error = new Error('Could not find event');
+            return next(error);
+        }
+        return res.status(200).send(event);
+    });
 }
 
 function modifyEvent(req, res, next) {
-	var VALID_FIELDS = ['start_date', 'location', 'late_fee', 'status'];
-	var requestedModification = req.body.update;
-	var eventId = req.params.eventId;
-	var update = {};
-	var options = {'new': true, runValidators: true};
-	var eventFields = _.keys(requestedModification);
+    var VALID_FIELDS = ['start_date', 'location', 'late_fee', 'status'];
+    var requestedModification = req.body.update;
+    var eventId = req.params.eventId;
+    var update = {};
+    var options = {'new': true, runValidators: true};
+    var eventFields = _.keys(requestedModification);
 
-	_.forEach(eventFields, function (fieldName) {
-		var isValidField = _.contains(VALID_FIELDS, fieldName);
-		if (isValidField) {
-			update[fieldName] = requestedModification[fieldName];
-		}
-	});
+    _.forEach(eventFields, function (fieldName) {
+        var isValidField = _.contains(VALID_FIELDS, fieldName);
+        if (isValidField) {
+            update[fieldName] = requestedModification[fieldName];
+        }
+    });
 
-	if (!_.isEmpty(update)) {
-		update.updated_at = Date.now();
-		Event
-			.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
-				if (error) {
-					error = new Error('Problem with updating event.');
-					return next(error);
-				}
+    if (!_.isEmpty(update)) {
+        update.updated_at = Date.now();
+        Event
+            .findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
+                if (error) {
+                    error = new Error('Problem with updating event.');
+                    return next(error);
+                }
 
-				res.status(200).send({
-					event: newEvent
-				});
-			});
-	} else {
-		Event
-			.findById(eventId, function (error, event) {
-				if (error) {
-					error = new Error('Problem with finding event.');
-					return next(error);
-				}
+                res.status(200).send({
+                    event: newEvent
+                });
+            });
+    } else {
+        Event
+            .findById(eventId, function (error, event) {
+                if (error) {
+                    error = new Error('Problem with finding event.');
+                    return next(error);
+                }
 
-				res.status(200).send({
-					event: event
-				});
-			});
-	}
+                res.status(200).send({
+                    event: event
+                });
+            });
+    }
 }
 
 function addUserToEvent(req, res, next) {
-	var eventId = req.params.eventId;
-	var userToAdd = req.params.userId;
-	var update = {
-		$addToSet: {
-			users: {
-				account: userToAdd,
-				role: 'participant'
-			}
-		}
-	};
-	var options = {'new': true, runValidators: true};
+    var eventId = req.params.eventId;
+    var userToAdd = req.params.userId;
+    var update = {
+        $addToSet: {
+            users: {
+                account: userToAdd,
+                role: 'participant'
+            }
+        }
+    };
+    var options = {'new': true, runValidators: true};
 
-	Event
-		.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
-			if (error) {
-				error = new Error('Problem with updating event.');
-				return next(error);
-			}
+    Event
+        .findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
+            if (error) {
+                error = new Error('Problem with updating event.');
+                return next(error);
+            }
 
-			res.status(200).send({
-				event: newEvent
-			});
-		});
+            res.status(200).send({
+                event: newEvent
+            });
+        });
 }
 
 function removeUserFromEvent(req, res, next) {
-	var eventId = req.params.eventId;
-	var userToRemove = req.params.userId;
-	var update = {
-		$pull: {
-			users: {
-				account: userToRemove,
-				role: 'participant'
-			}
-		}
-	};
-	var options = {'new': true, runValidators: true};
+    var eventId = req.params.eventId;
+    var userToRemove = req.params.userId;
+    var update = {
+        $pull: {
+            users: {
+                account: userToRemove,
+                role: 'participant'
+            }
+        }
+    };
+    var options = {'new': true, runValidators: true};
 
-	Event
-		.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
-			if (error) {
-				error = new Error('Problem with updating event.');
-				return next(error);
-			}
+    Event
+        .findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
+            if (error) {
+                error = new Error('Problem with updating event.');
+                return next(error);
+            }
 
-			res.status(200).send({
-				event: newEvent
-			});
-		});
+            res.status(200).send({
+                event: newEvent
+            });
+        });
 }
 
 function modifyUserInEvent(req, res, next) {
-	var VALID_FIELDS = ['role', 'on_time'];
-	var userToModify = req.params.userId;
-	var query = {
-		'users.account': userToModify
-	};
-	var update = {};
-	var options = {'new': true, runValidators: true};
+    var VALID_FIELDS = ['role', 'on_time'];
+    var userToModify = req.params.userId;
+    var query = {
+        'users.account': userToModify
+    };
+    var update = {};
+    var options = {'new': true, runValidators: true};
 
-	_.forEach(eventFields, function (fieldName) {
-		var isValidField = _.contains(VALID_FIELDS, fieldName);
-		if (isValidField) {
-			update[fieldName] = requestedModification[fieldName];
-		}
-	});
+    _.forEach(eventFields, function (fieldName) {
+        var isValidField = _.contains(VALID_FIELDS, fieldName);
+        if (isValidField) {
+            update[fieldName] = requestedModification[fieldName];
+        }
+    });
 
-	Event
-		.findOneAndUpdate(query, update, options, function (error, newEvent) {
-			if (error) {
-				error = new Error('Problem with updating user in event.');
-				return next(error);
-			}
+    Event
+        .findOneAndUpdate(query, update, options, function (error, newEvent) {
+            if (error) {
+                error = new Error('Problem with updating user in event.');
+                return next(error);
+            }
 
-			res.status(200).send({
-				event: newEvent
-			});
-		});
+            res.status(200).send({
+                event: newEvent
+            });
+        });
 }
 
 function checkIn(req, res) {
-	var userId = req.headers.user._id;
-	var userCoord = req.body.coordinates;
-	var eventId = req.params.eventId;
+    var userId = req.headers.user._id;
+    var userCoord = req.body.coordinates;
+    var eventId = req.params.eventId;
 
-	Event.findById(eventId, function (error, event) {
-		if (error) {
-			console.log(error);
-			return res.status(400).send(error);
-		}
+    Event.findById(eventId, function (error, event) {
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error);
+        }
 
-		var users = event.users;
+        var users = event.users;
 
-		var user = _.result(_.find(users, function(user) {
-			return user.account == userId;
-		}), 'user');
+        var user = _.result(_.find(users, function (user) {
+            return user.account == userId;
+        }), 'user');
 
-		if(!user){
-			console.log('User does not exist in the event');
-			return res.status(400).send('User does not exist in the event');
-		}
+        if (!user) {
+            console.log('User does not exist in the event');
+            return res.status(400).send('User does not exist in the event');
+        }
 
-		var eventCoord = event.location.coordinates;
+        var eventCoord = event.location.coordinates;
 
-		if (isCoordinateWithinThreshold(userCoord, eventCoord)) {
-			var query = {
-				_id: event._id
-			};
+        if (isCoordinateWithinThreshold(userCoord, eventCoord)) {
+            var query = {
+                _id: event._id
+            };
 
-			_.forEach(users, function (user) {
-				if (user.account == userId) {
-					user.on_time = true;
-				}
-			});
+            _.forEach(users, function (user) {
+                if (user.account == userId) {
+                    user.on_time = true;
+                }
+            });
 
-			Event.findOneAndUpdate(query, {users: users}, function () {
-				return res.status(200).send('User has checkedin');
-			})
-		} else {
-			return res.status(400).send('User is not within threshold');
-		}
-	});
+            Event.findOneAndUpdate(query, {users: users}, function () {
+                return res.status(200).send('User has checkedin');
+            })
+        } else {
+            return res.status(400).send('User is not within threshold');
+        }
+    });
 }
 
 var degreeToMetre = 111120;
 var thresholdMetres = 100;
 
 function isCoordinateWithinThreshold(userCoord, eventCoord) {
-	return ((userCoord.longitude - eventCoord.longitude) ^ 2 +
-		(userCoord.latitude - eventCoord.latitude) ^ 2) ^ 0.5 * degreeToMetre < thresholdMetres;
+    return ((userCoord.longitude - eventCoord.longitude) ^ 2 +
+        (userCoord.latitude - eventCoord.latitude) ^ 2) ^ 0.5 * degreeToMetre < thresholdMetres;
 }

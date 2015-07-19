@@ -121,7 +121,6 @@ function getGroup(req, res, next) {
             error = new Error('Could not find group');
             return next(error);
         }
-}
         return res.status(200).send(group);
     });
 }

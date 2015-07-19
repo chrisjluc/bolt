@@ -65,13 +65,23 @@ angular.module('boltApp', [
                 templateUrl: 'app/event/create.event.html',
                 controller: 'CreateEventCtrl as CreateEvent'
             })
-            .state('bolt.eventView', {
+            .state('bolt.eventsView', {
                 url: 'events',
                 templateUrl: 'app/event/view.event.html',
                 controller: 'EventCtrl as Event',
                 resolve: {
                     events: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/events');
+                    }]
+                }
+            })
+            .state('bolt.eventView', {
+                url: 'event/:eventId',
+                templateUrl: 'app/event/single.event.html',
+                controller: 'SingleEventCtrl as SingleEvent',
+                resolve: {
+                    eventData: ['dataResolver', '$stateParams', function(dataResolver, $stateParams) {
+                        return dataResolver.resolve('/api/events/' + $stateParams.eventId);
                     }]
                 }
             })
