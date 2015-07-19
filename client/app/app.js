@@ -6,7 +6,8 @@ angular.module('boltApp', [
     'ngSanitize',
     'ui.router',
     'ui.bootstrap',
-    'satellizer'
+    'satellizer',
+    'ngTagsInput'
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $urlRouterProvider
@@ -82,6 +83,9 @@ angular.module('boltApp', [
                 resolve: {
                     eventData: ['dataResolver', '$stateParams', function(dataResolver, $stateParams) {
                         return dataResolver.resolve('/api/events/' + $stateParams.eventId);
+                    }],
+                    userData: ['dataResolver', function(dataResolver) {
+                        return dataResolver.resolve('/api/users');
                     }]
                 }
             })

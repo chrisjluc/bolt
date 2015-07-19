@@ -2,4 +2,8 @@ Single
 
 <div>
     <h1 ng-bind="SingleEvent.event.name"></h1>
+    <tags-input ng-model="SingleEvent.tags">
+        <auto-complete source="SingleEvent.userEmails"></auto-complete>
+    </tags-input>
+    <button ng-click="SingleEvent.inviteUsers()">Add Users</button>
 </div>
