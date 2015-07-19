@@ -86,14 +86,17 @@ function getEvent(req, res, next) {
     ], finalCallback);
 
     function findEvent(waterfallNext) {
-        Event.findById(eventId, function (error, event) {
-            if (error) {
-                error = new Error('Could not find event');
-                return next(error);
-            }
+        Event
+            .findById(eventId)
+            .populate('users.account')
+            .exec(function (error, event) {
+                if (error) {
+                    error = new Error('Could not find event');
+                    return next(error);
+                }
 
-            waterfallNext(error, event);
-        });
+                waterfallNext(error, event);
+            });
     }
 
     function generateJoinToken(event, waterfallNext) {

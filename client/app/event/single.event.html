@@ -8,4 +8,11 @@ Single
     <button ng-click="SingleEvent.inviteUsers()">Add Users</button>
     <h2 ng-bind="SingleEvent.event.location.address"></h2>
     <h6 ng-bind="SingleEvent.event.joinToken"></h6>
+
+    <h2>Attendees</h2>
+    <div ng-repeat="user in SingleEvent.event.users">
+        {{user.account.first_name}} {{user.account.last_name}}<br>
+        {{user.role}}<br>
+        ------
+    </div>
 </div>
