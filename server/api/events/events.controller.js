@@ -86,9 +86,8 @@ function modifyEvent(req, res, next) {
 		}
 	});
 
-	update.updated_at = Date.now();
-
 	if (!_.isEmpty(update)) {
+		update.updated_at = Date.now();
 		Event
 			.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
 				if (error) {
