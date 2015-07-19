@@ -19,8 +19,8 @@ var eventSchema = {
     location: {
         name: String,
         coordinates: {
-            longitute: Number,
-            latitute: Number
+            longitude: Number,
+            latitude: Number
         }
     },
     late_fee: Number,
