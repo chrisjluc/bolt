@@ -1,0 +1,14 @@
+<div class="col-md-12">
+    <div class="row">
+        <div class="header">Unpaid</div>
+        <div class="payment-item" ng-repeat="unpaidPayment in Payment.unpaidPayments">
+            <span>Amount Owing: {{ unpaidPayment.amount }}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="header">Paid</div>
+        <div class="payment-item" ng-repeat="paidPayment in Payment.paidPayments">
+            <span>Amount Paid: {{ paidPayment.amount }}</span>
+        </div>
+    </div>
+</div>

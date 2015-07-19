@@ -50,6 +50,16 @@ angular.module('boltApp', [
                 templateUrl: 'app/auth/redirect.html',
                 controller: 'RedirectCtrl as Redirect'
             })
+            .state('bolt.paymentsView', {
+                url: 'payments',
+                templateUrl: 'app/payments/payments.html',
+                controller: 'PaymentCtrl as Payment',
+                resolve: {
+                    payments: ['dataResolver', function(dataResolver) {
+                        return dataResolver.resolve('/api/payments');
+                    }]
+                }
+            })
             .state('bolt.createGroup', {
                 url: 'create/group',
                 templateUrl: 'app/group/create.group.html',
