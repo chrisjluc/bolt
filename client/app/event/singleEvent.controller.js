@@ -5,6 +5,7 @@
 		.module('boltApp')
 		.controller('SingleEventCtrl', function (eventData, userData, $http) {
 			var vm = this;
+			var link = 'http://localhost:9000/join/' +  eventData.joinToken;
 
 			vm.event = eventData;
 			vm.users = userData.users;
@@ -20,12 +21,12 @@
 					return tag.text;
 				});
 
+				var request = {
+					link: link
+				};
+
 				_.forEach(emails, function (email) {
-					var link;
-					var request = {
-						email: email,
-						link: link
-					};
+					request.email = email;
 					$http
 						.post('/api/sendgrid/send-email', request)
 						.success(function(response) {

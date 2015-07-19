@@ -1,6 +1,10 @@
 var _ = require('lodash');
+var async = require('async');
 var Event = require('../../models/event.model.js');
 var schedule = require('../../schedule');
+var jwt = require('jwt-simple');
+var moment = require('moment');
+var config = require('../../config/environment');
 
 var eventsController = {
     getEvents: getEvents,
@@ -76,13 +80,35 @@ function createEvent(req, res, next) {
 function getEvent(req, res, next) {
     var eventId = req.params.eventId;
 
-    Event.findById(eventId, function (error, event) {
-        if (error) {
-            error = new Error('Could not find event');
-            return next(error);
-        }
+    async.waterfall([
+        findEvent,
+        generateJoinToken
+    ], finalCallback);
+
+    function findEvent(waterfallNext) {
+        Event.findById(eventId, function (error, event) {
+            if (error) {
+                error = new Error('Could not find event');
+                return next(error);
+            }
+
+            waterfallNext(error, event);
+        });
+    }
+
+    function generateJoinToken(event, waterfallNext) {
+        var payload = {
+            groupId: event._id,
+            exp: moment().add(14, 'days').unix()
+        };
+
+        event._doc.joinToken = jwt.encode(payload, config.TOKEN_SECRET);
+        waterfallNext(null, event);
+    }
+
+    function finalCallback(error, event) {
         return res.status(200).send(event);
-    });
+    }
 }
 
 function modifyEvent(req, res, next) {
