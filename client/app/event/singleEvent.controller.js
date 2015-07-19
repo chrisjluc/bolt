@@ -71,9 +71,11 @@
             }
 
             function userIsHost() {
-                return _.find(vm.event.users, function(user) {
+                var self = _.find(vm.event.users, function(user) {
                     return user.account._id === userData._id;
-                }).role === 'host';
+                });
+
+                return self && self.role === 'host';
             }
 
             function notSelf(user) {
