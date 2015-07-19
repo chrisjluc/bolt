@@ -53,7 +53,7 @@ angular.module('boltApp', [
             .state('bolt.paymentsView', {
                 url: 'payments',
                 templateUrl: 'app/payments/payments.html',
-                controller: 'PaymentCtrl as Payment',
+                controller: 'PaymentsCtrl as Payment',
                 resolve: {
                     payments: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/payments');
