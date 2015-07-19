@@ -3,13 +3,11 @@
 
     angular
         .module('boltApp')
-        .controller('LoginCtrl', function ($scope, $http, $auth) {
+        .controller('LoginCtrl', function ($scope, $http) {
 
             var vm = this;
 
             vm.payPalUrl = '';
-
-            console.log($auth.isAuthenticated());
 
             $http
                 .get('/api/auth')
