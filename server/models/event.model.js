@@ -39,6 +39,7 @@ var eventSchema = {
     recurring: {
         type: String,
         enum: [
+            'Minutely',
             'Daily',
             'Weekly',
             'Monthly',

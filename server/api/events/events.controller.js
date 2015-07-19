@@ -32,29 +32,35 @@ function getEvents(req, res, next) {
 				return next(error);
 			}
 
-			return res.status(200).send(events);
-		});
+            _.forEach(events, function(err, event){
+                event.allowCheckIn = Date.now() < event.start_date && event.start_date >= Date.now() - 120 * 1000;
+            });
+
+            return res.status(200).send(events);
+        });
 }
 
 function createEvent(req, res, next) {
-	var userId = req.headers.user._id;
-	var eventName = req.body.eventName;
-	var participants = req.body.participants;
-	var startDate = req.body.startDate;
-	var location = req.body.location;
-	var lateFee = req.body.lateFee;
+    var userId = req.headers.user._id;
+    var eventName = req.body.eventName;
+    var participants = req.body.participants;
+    var startDate = req.body.startDate;
+    var location = req.body.location;
+    var lateFee = req.body.lateFee;
+    var recurring = req.body.recurring;
 
-	var newEvent = new Event({
-		name: eventName,
-		users: [{
-			account: userId,
-			role: 'host'
-		}],
-		start_date: startDate,
-		location: location,
-		late_fee: lateFee,
-		status: 'scheduled'
-	});
+    var newEvent = new Event({
+        name: eventName,
+        users: [{
+            account: userId,
+            role: 'host'
+        }],
+        start_date: startDate,
+        location: location,
+        late_fee: lateFee,
+        status: 'scheduled',
+        recurring: recurring
+    });
 
 	_.forEach(participants, function (participant) {
 		var newParticipant = {

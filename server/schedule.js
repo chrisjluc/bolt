@@ -7,6 +7,14 @@ module.exports = {
 	scheduleEvent: scheduleEvent,
 };
 
+var recurringSeconds = {
+	Minutely: 60,
+	Daily: 24 * 60 * 60,
+	Weekly: 7 * 24 * 60 * 60,
+	Monthly: 30 * 24 * 60 * 60,
+	Yearly: 365 * 24 * 60 * 60
+};
+
 function init() {
 	Event.find({status: 'scheduled', start_date: {$gte: Date.now()}}, function (err, events) {
 		if (err) return console.log(err);
@@ -21,7 +29,27 @@ function scheduleEvent(event) {
 	schedule.scheduleJob(event._id, event.start_date, function () {
 		Event.findById(event._id, function (err, event) {
 			console.log(event._id + " " + event.name + " event is being triggered");
-			// Charge users
+
+			_.forEach(event.users, function(user){
+
+			})
+
+			// schedule recurring events again
+			scheduledJobs[event._id] = null;
+			var query = {
+				_id: event._id
+			};
+			var update = {
+				start_date: event.start_date + recurringSeconds[event.recurring]
+			};
+			var option = {
+				'new': true
+			};
+			event.findOneAndUpdate(query, update, option
+				, function(err, updatedEvent){
+				if (err) return console.error(err);
+				scheduleEvent(updatedEvent);
+			});
 		});
 	});
 }
