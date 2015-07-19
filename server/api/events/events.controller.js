@@ -178,6 +178,11 @@ function addUserToEvent(req, res, next) {
 
 	Event
 		.findById(eventId, function (error, event) {
+			if (error || !event) {
+				var notFoundError = new Error('Event not found!');
+				return next(notFoundError);
+			}
+
 			var userAlreadyExists = !_.every(event.users, function (user) {
 				return user.account !== userToAdd;
 			});
@@ -186,18 +191,18 @@ function addUserToEvent(req, res, next) {
 				var error = new Error('User is already a participant in the event!');
 				return next(error);
 			}
-		});
 
-	Event
-		.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
-			if (error) {
-				error = new Error('Problem with updating event.');
-				return next(error);
-			}
+			Event
+				.findByIdAndUpdate(eventId, update, options, function (error, newEvent) {
+					if (error) {
+						error = new Error('Problem with updating event.');
+						return next(error);
+					}
 
-			res.status(200).send({
-				event: newEvent
-			});
+					res.status(200).send({
+						event: newEvent
+					});
+				});
 		});
 }
 

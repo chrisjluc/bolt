@@ -100,6 +100,9 @@ angular.module('boltApp', [
                     }],
                     usersData: ['dataResolver', function(dataResolver) {
                         return dataResolver.resolve('/api/users');
+                    }],
+                    paymentsData: ['dataResolver', '$stateParams', function(dataResolver, $stateParams) {
+                        return dataResolver.resolve('/api/payments/events/' + $stateParams.eventId);
                     }]
                 }
             })

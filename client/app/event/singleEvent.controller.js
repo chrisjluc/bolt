@@ -3,7 +3,7 @@
 
     angular
         .module('boltApp')
-        .controller('SingleEventCtrl', function (eventData, userData, usersData, $http, $state) {
+        .controller('SingleEventCtrl', function (eventData, userData, usersData, $http, $state, paymentsData) {
             var vm = this;
             var link = 'http://localhost:9000/join/event/' + eventData.joinToken;
 
@@ -24,6 +24,8 @@
             if (!selfInEvent) {
                 $state.go('bolt');
             }
+
+            console.log(paymentsData);
 
             function inviteUsers() {
                 var emails = _.map(vm.tags, function (tag) {

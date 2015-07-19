@@ -14,6 +14,7 @@ module.exports = function(app) {
     app.use('/api/users', require('./api/users/users.router.js'));
     app.use('/api/groups',  AuthCtrl.ensureAuthenticated, require('./api/groups/groups.router.js'));
     app.use('/api/events', AuthCtrl.ensureAuthenticated, require('./api/events/events.router.js'));
+    app.use('/api/payments', AuthCtrl.ensureAuthenticated, require('./api/payments/payments.router.js'));
     app.use('/api/sendgrid', require('./api/sendgrid/sendgrid.router.js'));
 
     // All undefined asset or api routes should return a 404
