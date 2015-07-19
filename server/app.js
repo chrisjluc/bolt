@@ -10,16 +10,15 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
-var paypal = require('paypal-rest-sdk');
 var schedule = require('./schedule');
+var braintree = require('braintree');
 
-
-// Set up paypal
-paypal.configure({
-    'mode': 'sandbox',
-    'client_id': 'ATIuH1VHksIaDFFpOfapLzPacHf9c7wDuT0wZzrngbzIbq593DEebUgidJ9BLv6Lma3VWRkEbWqY9lzZ',
-    'client_secret': 'EFuhilq5zlCQkaoceLMOL77lcwb_pq--z-CgToYSTG5tPibqBbLSVd-CZeHtxJycehPyvYMTwk0UdhKp',
-    'openid_redirect_uri': 'http://localhost:9000/redirect'
+// setup brain tree
+var gateway = braintree.connect({
+    environment: braintree.Environment.Sandbox,
+    merchantId: "pdqfv2v9hfpvbpbr",
+    publicKey: "mcq2qbg8tsk4t9nx",
+    privateKey: "5ed9a560094ed7d3d5f6aa86c3c7d7cb"
 });
 
 // Connect to database

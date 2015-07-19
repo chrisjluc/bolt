@@ -5,5 +5,6 @@ var router = express.Router();
 
 router.get('/', AuthCtrl.authenticateUser);
 router.get('/paypal-account/:code', AuthCtrl.getPayPalUser);
+router.get('/braintree-client-token', AuthCtrl.getBrainTreeClientToken);
 
 module.exports = router;
